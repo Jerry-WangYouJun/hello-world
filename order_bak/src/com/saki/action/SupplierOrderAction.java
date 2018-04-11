@@ -11,14 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.opensymphony.xwork2.ModelDriven;
 import com.saki.entity.Message;
 import com.saki.model.TCompany;
-import com.saki.model.TOrder;
-import com.saki.model.TProduct;
+import com.saki.model.TOrderMapping;
 import com.saki.model.TSupllierOrder;
-import com.saki.model.TSupllierOrderDetail;
 import com.saki.service.CompanyServiceI;
 import com.saki.service.OrderServiceI;
 import com.saki.service.SupllierOrderServiceI;
@@ -103,6 +100,7 @@ public class SupplierOrderAction extends BaseAction implements ModelDriven<TSupl
 		 if(StringUtils.isEmpty(companyId) && getSession().getAttribute("companyId") != null) {
 			   companyId = String.valueOf((Integer)getSession().getAttribute("companyId"));
 		 }
+		
 		if(!StringUtils.isEmpty(id)) {
 			List<Map<String,Object>>  list = supllierOrderService.searchDetail(id , companyId);
 			String jsonString = JSON.toJSONString(list);
@@ -187,7 +185,6 @@ public class SupplierOrderAction extends BaseAction implements ModelDriven<TSupl
 
 	public void getChanges( ) {
 		 String orderId = getParameter("id");
-		 System.out.println(orderId);
 		 String update = getParameter("updated");
 		 String msg = "";
 		 if(StringUtils.isNotEmpty(update)) {

@@ -178,17 +178,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <style type="text/css">
     .tabs-panels>.panel>.panel-body {  
     	overflow: hidden;  
-    } 
+    } l
     </style>
     <%
-		} else {
+		} else  if(session.getAttribute("loged")==null){
 	%>
 	<script>
- 	  	 alert('登陆信息已过期，请重新登录');
  		 location.replace('<%=path%>' + '/pages/login.jsp');
 	</script>
 	<%
-		}
+		} else{
+		
+	%>	
+ 	  	<script type="text/javascript">
+ 	  	 alert('登陆信息已过期，请重新登录');
+ 	  	 location.replace('<%=path%>' + '/pages/login.jsp');
+ 	  	</script>
+ 	 <%
+		} 
+		
 	%>	
   </body>
 </html>

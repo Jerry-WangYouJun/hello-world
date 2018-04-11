@@ -193,6 +193,7 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	    	   TSupllierOrderDetail detail = new TSupllierOrderDetail();
 	    	   detail = (TSupllierOrderDetail)getByDetailId(obj.getString("id"));
 	    	   if(detail != null) {
+	    		   detail.setPrice(StringUtils.isEmpty(obj.getString("price"))?0:obj.getDouble("price"));
 	    		   detail.setNum(StringUtils.isEmpty(obj.getString("acount")) ? 0 : obj.getIntValue("acount"));
 	    		   detail.setConpanyId(StringUtils.isEmpty(obj.getString("companyId")) ? 0 : obj.getIntValue("companyId"));
 	    		   update(detail);
@@ -254,12 +255,15 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	}
 	@Override
 	public void getSupllierOrder() {
+		String hql = "delete from TSupllierOrder where status = 1 ";
+		supplierOrderDao.updateHql(hql);
 		TSupllierOrder supOrder = new TSupllierOrder();
 		int amount = 0 ;//订单总数
 		List<TOrderMapping> orderMap =  new ArrayList<TOrderMapping>();
 		List<Integer > orderList = new ArrayList<Integer >();
 		Map<Integer , Integer>  tempMap = new HashMap<Integer, Integer>();
 	    List<TOrderDetail> orderDetailList =  getOrderDetailsForSupplierOrder();
+	    
 	    for(TOrderDetail orderDetail : orderDetailList) {
 	    		//计算订单总数
 		  	  if(orderDetail.getNum() != null ) {

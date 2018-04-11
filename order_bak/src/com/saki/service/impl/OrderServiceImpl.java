@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,14 @@ import com.saki.service.OrderServiceI;
 
 @Service("orderService")
 public class OrderServiceImpl implements OrderServiceI{
-
+	
+	private SessionFactory sessionFactory;
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 	private BaseDaoI orderDao;
 	public BaseDaoI getOrderDao() {
 		return orderDao;
@@ -110,6 +118,15 @@ public class OrderServiceImpl implements OrderServiceI{
 	}
 	@Override
 	public List<Map<String, Object>> searchDetail(String id ) {
+		int  num = orderDao.count("from  TOrder o , TOrderMapping m  where o.id = m.orderId ");
+		//如果生成了供应商订单 则关联供应商订单查询返回结果（有供应商报价就带出报价），如果没有只关联查询订单信息
+		if(num <= 0 ){
+			  return searchDetailNullPrice(id);
+		}else{
+			return searchDetailPrice(id);
+		}
+	}
+	private List<Map<String, Object>> searchDetailPrice(String id) {
 		String hql = "from TProduct t , TProductDetail d, TOrder o , TOrderDetail od , TSupllierOrderDetail sod , "
 				+ " TOrderMapping  m "
 				+ " where t.id = d.productId  and o.id = od.orderId and od.productDetailId = d.id  "
@@ -124,15 +141,6 @@ public class OrderServiceImpl implements OrderServiceI{
 			TProduct product = (TProduct) objs[0];
 			TProductDetail detail = (TProductDetail) objs[1];
 			TOrderDetail oDetail = (TOrderDetail) objs[3];
-			TSupllierOrderDetail  sDetail = (TSupllierOrderDetail)objs[4];
-			if(detailMap.containsKey(detail.getId())) {
-				 Map<String, Object> temp = detailMap.get(detail.getId());
-				 if(sDetail.getPrice() > 0) {
-					 temp.put("sprice", temp.get("sprice").toString() + "/" + sDetail.getPrice());
-					 detailMap.put(detail.getId(), temp);
-					 continue;
-				 }
-			}
 			Map<String , Object >  map = new HashMap<String,Object>();
 			map.put("id", oDetail.getId());
 			map.put("product", product.getProduct() );
@@ -144,9 +152,18 @@ public class OrderServiceImpl implements OrderServiceI{
 			if(oDetail.getPrice() != null && oDetail.getPrice() > 0 ) {
 				map.put("price", oDetail.getPrice());
 			}
-			map.put("sprice",  sDetail.getPrice() );
 			map.put("detailId", detail.getId());
 			map.put("productId", product.getId());
+			TSupllierOrderDetail  sDetail = (TSupllierOrderDetail)objs[4];
+			if(detailMap.containsKey(detail.getId())) {
+				 Map<String, Object> temp = detailMap.get(detail.getId());
+				 if(sDetail.getPrice() > 0) {
+					 temp.put("sprice", temp.get("sprice").toString() + "/" + sDetail.getPrice());
+					 detailMap.put(detail.getId(), temp);
+					 continue;
+				 }
+			}
+			map.put("sprice",  sDetail.getPrice() );
 			detailMap.put(detail.getId(), map);
 			//mapList.add(map);
 		}
@@ -155,6 +172,42 @@ public class OrderServiceImpl implements OrderServiceI{
 		}
 		return mapList ;
 	}
+	
+	private List<Map<String, Object>> searchDetailNullPrice(String id) {
+		List<Map<String , Object>>  mapList = new ArrayList<Map<String , Object>>();
+		String hql = "from TProduct t , TProductDetail d, TOrder o , TOrderDetail od "
+				+ " where t.id = d.productId  and o.id = od.orderId and od.productDetailId = d.id  "
+				+ " and  o.id = " + id  ;
+		List<Object[]> list = orderDao.find(hql);
+		Map<Integer , Map<String,Object>> detailMap = new HashMap<Integer , Map<String,Object>>();
+		for (int i = 0; i < list.size(); i++) {
+			Object[] objs = list.get(i);
+			//主表数据
+			TProduct product = (TProduct) objs[0];
+			TProductDetail detail = (TProductDetail) objs[1];
+			TOrderDetail oDetail = (TOrderDetail) objs[3];
+			Map<String , Object >  map = new HashMap<String,Object>();
+			map.put("id", oDetail.getId());
+			map.put("product", product.getProduct() );
+			map.put("type",  product.getType());
+			map.put("sub_product", detail.getSubProduct());
+			map.put("materail", detail.getMaterial());
+			map.put("acount",  oDetail.getNum());
+			map.put("unit", product.getUnit());
+			if(oDetail.getPrice() != null && oDetail.getPrice() > 0 ) {
+				map.put("price", oDetail.getPrice());
+			}
+			map.put("detailId", detail.getId());
+			map.put("productId", product.getId());
+			detailMap.put(detail.getId(), map);
+		}
+		for(Map<String,Object> map : detailMap.values()) {
+			   mapList.add(map);
+		}
+		return mapList ;
+	}
+	
+	
 	@Override
 	public List<TProduct> searchProduct() {
 		  String hql = "select distinct  new TProduct(product , unit) from TProduct  " ;

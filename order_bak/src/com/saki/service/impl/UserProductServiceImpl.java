@@ -46,7 +46,7 @@ public class UserProductServiceImpl implements UserProductServiceI{
 
 	@Override
 	public void save(int companyId, String productlist) {
-		delete(companyId);
+		//delete(companyId);
 		String[] ap = productlist.split(",");
 		for(int i=0;i<ap.length;i++){
 			TUserProduct t = new TUserProduct();

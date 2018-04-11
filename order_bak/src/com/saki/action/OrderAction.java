@@ -22,6 +22,7 @@ import com.saki.model.TProduct;
 import com.saki.model.TProductDetail;
 import com.saki.service.OrderServiceI;
 import com.saki.utils.DateUtil;
+import com.saki.utils.SystemUtil;
 
 @Namespace("/")
 @Action(value="orderAction")
@@ -98,7 +99,9 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	public void getProductType() {
 	    String  product = getParameter("product");
 	    try {
-			product = new String(product.getBytes("ISO-8859-1"),"UTF-8");
+	    	if("mac".equals(SystemUtil.getSystemName())){
+	    		product = new String(product.getBytes("ISO-8859-1"),"UTF-8");
+	    	}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -118,7 +121,6 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	
 	public void getChanges( ) {
 		 String orderId = getParameter("id");
-		 System.out.println(orderId);
 		 String insert = getParameter("inserted");
 		 String update = getParameter("updated");
 		 String delete = getParameter("deleted");

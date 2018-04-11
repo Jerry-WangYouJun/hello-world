@@ -42,8 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    	<table id="table_add" class="easyui-datagrid" fit="true" ></table>              
 		</div>
 	<div id="company_dlg_buttons" style="width:600px;height: 40px;text-align: center">
-			<button id="company_save" type="button" class="btn btn-primary btn-dialog-left">保存</button>
-			<button onclick="company_close()" type="button" class="btn btn-default btn-dialog-right">取消</button>
+			<button onclick="company_close()" type="button" class="btn btn-default btn-dialog-right">关闭</button>
 		</div>
     <script type="text/javascript">
     	$(function(){
