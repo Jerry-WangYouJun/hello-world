@@ -105,13 +105,17 @@ public class OrderServiceImpl implements OrderServiceI{
 		}
 		if(sort!=null && order!=null){
 			hql = hql + " order by " + sort + " " + order;
-		}	
+		}
+		String companyHql = "from TCompany t" ;
+		List<TCompany> companyList = orderDao.find(companyHql);
 		List<TOrder> l = orderDao.find(hql);
 		grid.setTotal(l.size());
 		if(page!=null && rows !=null){
 			List<TOrder> lp = orderDao.find(hql, params, Integer.valueOf(page),  Integer.valueOf(rows));
+			getCompanyName(companyList , lp);
 			grid.setRows(lp);
 		}else{
+			getCompanyName(companyList , l);
 			grid.setRows(l);
 		}	
 		return grid;
