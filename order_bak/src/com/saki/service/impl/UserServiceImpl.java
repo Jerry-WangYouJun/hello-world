@@ -137,4 +137,10 @@ public class UserServiceImpl implements UserServiceI{
 		TUser t = (TUser) userDao.get("from TUser t where t.companyId = :companyId", params);
 		return t;
 	}
+
+	@Override
+	public void deleteByCompanyId(Integer id) {
+		userDao.updateHql(" delete from TUser t where t.companyId = " + id );
+		
+	}
 }

@@ -71,7 +71,6 @@ public class UserProductServiceImpl implements UserProductServiceI{
 		System.out.println("------------------- " + companyId);
 		params.put("companyId", companyId);
 		List<TUserProduct> l = userProductDao.find("from TUserProduct t where t.companyId = :companyId", params);
-		System.out.println("-222222222222222222222222222222 ");
 		return l;
 	}
 

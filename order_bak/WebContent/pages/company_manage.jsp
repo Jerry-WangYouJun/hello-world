@@ -53,7 +53,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					{field:'contacts',title:'联系人',width:100,align:'center'},
 					{field:'address',title:'地址',width:150,align:'center'},
 					{field:'business',title:'主营业务',width:150,align:'center'},
-					{field:'level',title:'企业星级',width:150,align:'center'},				
+					{field:'level',title:'企业星级',width:150,align:'center'},
+					{field:'telphone',title:'联系电话',width:150,align:'center'},
+					{field:'tax',title:'税号',width:150,align:'center'},
+					{field:'card',title:'银行账号',width:150,align:'center'},
 					{field:'remark',title:'备注',width:100,align:'center'}
 				]],				
 			});
@@ -140,14 +143,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	
 	
-	<div  id="company_dlg" closed="true" class="easyui-dialog" style="width:400px;height: 450px"
+	<div  id="company_dlg" closed="true" class="easyui-dialog" style="width:750px;height: 450px"
 	data-options="border:'thin',cls:'c1',collapsible:false,modal:true,closable:false,top:10,buttons: '#company_dlg_buttons'">
     	<form id="company_form" role="form" style="padding: 20px">
-    		<div class="form-group col-md-12">
+    		<div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">公司名称：</label>
                 <input name="name" class=" form-control" style="display: inline-block;width: 70%">
             </div>
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">企业类型：</label>
                 <select name="roleId" id="roleId" 
                     		class="form-control select2 easyui-combobox" style="width: 70%;height: 86%" editable="false">
@@ -155,27 +158,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	<option value="3">客户</option>
                 </select>
             </div>
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">登录账号：</label>
                 <input name="userName" class=" form-control" style="display: inline-block;width: 70%">
             </div>
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">联系人：</label>
                 <input name="contacts" class=" form-control" style="display: inline-block;width: 70%">
             </div>
-            <div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">地址：</label>
-                <textarea name="address" class=" form-control" rows="2" style="display: inline-block;width: 70%"></textarea>
-            </div>
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">主营业务：</label>
                 <input name="business" class=" form-control" style="display: inline-block;width: 70%">
             </div>
-            <div class="form-group col-md-12">
+            <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">企业星级：</label>
                 <input name="level" class=" form-control" style="display: inline-block;width: 70%">
             </div>
-            <div class="form-group col-md-12">
+            
+            <div class="form-group col-md-6">
+            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">联系电话：</label>
+                <input name="telphone" class=" form-control"  style="display: inline-block;width: 70%">
+            </div>
+            <div class="form-group col-md-6">
+            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">税号：</label>
+                <input name="tax" class=" form-control" style="display: inline-block;width: 70%">
+            </div>
+            <div class="form-group col-md-6">
+            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">银行账号：</label>
+                <input name="card" class=" form-control" style="display: inline-block;width: 70%">
+            </div>
+            <div class="form-group col-md-6">
+            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">地址：</label>
+                <textarea name="address" class=" form-control" style="display: inline-block;width: 70%"></textarea>
+            </div>
+            <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">备注：</label>
                 <textarea name="remark" class=" form-control" rows="4" style="display: inline-block;width: 70%"></textarea>
             </div>

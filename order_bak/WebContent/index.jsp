@@ -75,6 +75,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <li>
                         <a href="#"  onclick="openTab('<%=path%>/pages/user_manage.jsp')">用户管理</a>
                     </li>
+                     <li>
+                        <a href="#"  onclick="openTab('<%=path%>/pages/confirm_manage.jsp')">采购日管理</a>
+                     </li>
                 </ul>
                 <!-- /.nav-second-level -->
             </li>

@@ -472,20 +472,27 @@
 					'确定进行拆分么?',
 					function(r) {
 						if (r) {
-							$.ajax({
-								url : '${pageContext.request.contextPath}/supplier!splitOrder.action',
-								data : {
-									"id" : row.id
-								},
-								dataType : 'json',
-								success : function(obj) {
-									if (obj.success) {
-										alert(obj.msg);
-										$('#table_add').datagrid('reload');
-									} else {
-										alert(obj.msg);
-										$('#table_add').datagrid('reload');
-									}
+							$.messager.prompt('','请输入要拆分的总数',function(s){
+								if(Math.round(s) === s){
+									$.ajax({
+										url : '${pageContext.request.contextPath}/supplier!splitOrder.action',
+										data : {
+											"id" : row.id ,
+											"num" :s
+										},
+										dataType : 'json',
+										success : function(obj) {
+											if (obj.success) {
+												alert(obj.msg);
+												$('#table_add').datagrid('reload');
+											} else {
+												alert(obj.msg);
+												$('#table_add').datagrid('reload');
+											}
+										}
+									});
+								}else{
+									$.messager.alert("error","请输入正确的数字");
 								}
 							});
 						}

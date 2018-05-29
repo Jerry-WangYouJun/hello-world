@@ -28,6 +28,10 @@ public class TCompany implements java.io.Serializable {
 	private Integer roleId;
 	private String userName;
 	
+	private String telphone;
+	private String tax ;
+	private String card;
+	
 	// Constructors
 
 	/** default constructor */
@@ -35,13 +39,17 @@ public class TCompany implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public TCompany(String name, String contacts, String address, String business, String level, String remark) {
+	public TCompany(String name, String contacts, String address, String business, 
+			String level, String remark,String telphone ,String tax , String card) {
 		this.name = name;
 		this.contacts = contacts;
 		this.address = address;
 		this.business = business;
 		this.level = level;
 		this.remark = remark;
+		this.telphone=telphone;
+		this.tax=tax;
+		this.card=card;
 	}
 
 	// Property accessors
@@ -136,5 +144,32 @@ public class TCompany implements java.io.Serializable {
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
 	}
+	@Column(name = "telphone", length = 20)
+	public String getTelphone() {
+		return telphone;
+	}
+
+	public void setTelphone(String telphone) {
+		this.telphone = telphone;
+	}
+	@Column(name = "tax", length = 30)
+	public String getTax() {
+		return tax;
+	}
+
+	public void setTax(String tax) {
+		this.tax = tax;
+	}
+	@Column(name = "card", length = 30)
+	public String getCard() {
+		return card;
+	}
+
+	
+	public void setCard(String card) {
+		this.card = card;
+	}
+	
+	
 
 }

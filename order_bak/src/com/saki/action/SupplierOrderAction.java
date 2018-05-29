@@ -115,7 +115,10 @@ public class SupplierOrderAction extends BaseAction implements ModelDriven<TSupl
 		Message j = new Message();
 		try {
 			String id = getParameter("id");
-			supllierOrderService.splitOrder(id);
+			int num  = Integer.valueOf(getParameter("num"));
+			for(int i = 1 ; i < num ; i++){
+				supllierOrderService.splitOrder(id);
+			}
 			j.setSuccess(true);
 			j.setMsg("操作成功");
 		} catch (Exception e) {

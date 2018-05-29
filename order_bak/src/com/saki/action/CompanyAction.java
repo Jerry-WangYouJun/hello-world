@@ -75,7 +75,7 @@ public class CompanyAction extends BaseAction implements ModelDriven<TCompany>{
 			user.setRoleId(Integer.valueOf(roleId));
 			user.setCompanyId(company.getId());
 			user.setUserName(userName);
-			userService.add(user);
+			userService.update(user);
 			j.setSuccess(true);
 			j.setMsg("更新成功");
 		}catch(Exception e){
@@ -89,6 +89,8 @@ public class CompanyAction extends BaseAction implements ModelDriven<TCompany>{
 		Message j = new Message();
 		try{
 			companyService.deleteByKey(company.getId().toString());
+			System.out.println(company.getId());
+			userService.deleteByCompanyId(company.getId());
 			j.setSuccess(true);
 			j.setMsg("删除成功");
 		}catch(Exception e){
