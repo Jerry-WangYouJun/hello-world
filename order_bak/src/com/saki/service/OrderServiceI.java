@@ -23,4 +23,8 @@ public interface OrderServiceI extends BaseServiceI{
 	void delete(TOrderDetail detail);
 
 	List<TOrderDetail> getOrderDetailsForSupplierOrder();
+	
+	void updateOrderLocked(String locked, String id);
+	
+	void updateOrderLockedTask();
 }

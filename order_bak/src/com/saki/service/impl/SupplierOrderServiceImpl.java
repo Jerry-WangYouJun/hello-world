@@ -308,7 +308,7 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	    
 	}
 	private List<TOrderDetail> getOrderDetailsForSupplierOrder() {
-		String  hql = "from TOrderDetail t  where t.orderId in (select  id from TOrder o where o.status = '1')";
+		String  hql = "from TOrderDetail t  where t.orderId in (select  id from TOrder o where o.locked = '1')";
 		List<TOrderDetail> list = supplierOrderDao.find(hql);
 		return list;
 	}

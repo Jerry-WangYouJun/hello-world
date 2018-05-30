@@ -60,6 +60,7 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		super.writeJson(orderService.search("companyId" , companyId , "startDate", "desc", page, rows));
 	}
 	public void add(){
+		order.setLocked("0");
 		orderService.add(order);
 	}
 	public void update(){
@@ -67,6 +68,22 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	}
 	public void delete(){
 		orderService.deleteByKey(String.valueOf(order.getId()));
+	}
+	
+	public void updateOrderLocked(){
+		String lockFlag = getParameter("locked");
+		String id =getParameter("id");
+		Message j = new Message();
+		try {
+			orderService.updateOrderLocked(lockFlag , id );
+			j.setSuccess(true);
+			j.setMsg("操作成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			j.setSuccess(false);
+			j.setMsg("操作失败");
+		}
+		super.writeJson(j);
 	}
 	public void search(){
 		String name = getParameter("name");

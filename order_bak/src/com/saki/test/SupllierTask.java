@@ -26,7 +26,7 @@ public class SupllierTask {
 	 * 
 	 */
     public void getSupllierOrder(){  
-    		//supllierOrderService.getSupllierOrder();
+    		supllierOrderService.getSupllierOrder();
     }  
       
     

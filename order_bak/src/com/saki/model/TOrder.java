@@ -29,6 +29,7 @@ public class TOrder implements java.io.Serializable {
 	private double amount;
 	private String remark;
 	private String companyName;
+	private String locked;
 
 	// Constructors
 
@@ -163,4 +164,15 @@ public class TOrder implements java.io.Serializable {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+
+	@Column(name="locked")
+	public String getLocked() {
+		return locked;
+	}
+
+	public void setLocked(String locked) {
+		this.locked = locked;
+	}
+	
+	
 }

@@ -63,7 +63,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					text:'确认付款',
 					iconCls: 'icon-remove',
 					handler: function(){order_status('3');}
-				}
+				},'-',{
+   						text:'锁定订单',
+   						iconCls: 'icon-ok',
+   						handler: function(){updateOrderLocked('1');}
+					},'-',{
+						text:'解锁订单',
+						iconCls: 'icon-ok',
+						handler: function(){updateOrderLocked('0');}
+					}
     		];
     		var orderUrl = '${pageContext.request.contextPath}/orderAction!loadAll.action' ;
     		if("${roleId}" == '3'){
@@ -143,6 +151,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								 return "已付款";
 							} else if(value == "4"){
 								return "已收货";
+							}
+	
+						}
+					},{field:'locked',title:'是否锁定',width:100,align:'center',
+						formatter : function(value, row, index) {
+							if (value == '1') {
+								return "已锁定";
+							}  else if(value == "0"){
+								return "未锁定";
+							}else {
+								return "";
 							}
 	
 						}
@@ -524,6 +543,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     					}
     				});  		
     			}
+    	}
+    	
+    	function updateOrderLocked(status){
+    		var row = $('#table_order').datagrid('getSelected');
+        		if(row){
+        			$.messager.confirm(
+        				'提示',
+        				'确定执行该操作?',
+        				function(r) {
+        					if (r) {
+        						$.ajax({ 
+        			    			url: '${pageContext.request.contextPath}/orderAction!updateOrderLocked.action?locked=' + status,
+        			    			data : {"id":row.id},
+        			    			dataType : 'json',
+        			    			success : function(obj){
+        			    				if(obj.success){
+        			    				 	alert(obj.msg);
+        			    				 	$('#table_order').datagrid('reload');
+        			    				}else{
+        			    					alert(obj.msg);
+        			    					$('#table_order').datagrid('reload');
+        			    				}
+        			    			}
+        			    		});
+        					}
+        				});  		
+        			}
     	}
     	function order_edit(){
 			var row = $('#table_order').datagrid('getSelected');
