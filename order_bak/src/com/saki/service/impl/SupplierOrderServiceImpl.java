@@ -151,7 +151,9 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 				map.put("companyId" ,oDetail.getConpanyId() );
 				String hqlCompany = "from TCompany  t where t.id = " + oDetail.getConpanyId() ;
 				TCompany company = (TCompany)supplierOrderDao.get(hqlCompany);
-				map.put("companyName",company.getName() );
+				if(company != null){
+					map.put("companyName",company.getName() );
+				}
 			}
 			mapList.add(map);
 		}
@@ -284,7 +286,7 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	    /**  插入供应商订单*/
 	    supOrder.setAmount(amount);
 	    supOrder.setStatus("1");//0代表新订单状态
-	    supOrder.setSupplierOrderNo("S_" + DateUtil.getStringDate());
+	    supOrder.setSupplierOrderNo("GHT"  + DateUtil.getStringDate());
 	    add(supOrder);
 	    
 	    /**插入供应商详情**/
@@ -339,8 +341,9 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 		  return list;
 	}
 	@Override
-	public void updateOrderStatus() {
-		String hql = " update  TOrder t set  t.status = '2' where t.status = '1' " ;
+	public void updateOrderStatus(String  id ) {
+		String hql = " update  TOrder t set  t.status = '2' where t.status = '1' and t.id  in ( select o.id from "
+				+ " TOrder o , TOrderMapping om where  om.suppilerOrderId = " + id +" ) " ;
 		supplierOrderDao.updateHql(hql);
 	}
 	

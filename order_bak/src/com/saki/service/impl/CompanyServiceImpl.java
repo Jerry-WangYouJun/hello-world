@@ -1,6 +1,7 @@
 package com.saki.service.impl;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +63,31 @@ public class CompanyServiceImpl implements CompanyServiceI{
       }	
 		return grid;
 	}
+	
+	@Override
+	public Grid loadQuery(String sort, String order, String page, String rows , Map<String,Object> params) {
+		Grid grid = new Grid();
+		String hql = "from TCompany t where 1=1 ";
+		if(sort!=null && order!=null){
+			hql = "from TCompany t order by " + sort + " " + order;
+		}
+		String countHql = "select count(t.id) from TCompany t  where 1= 1 ";
+		Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+		while(it.hasNext()){
+			Map.Entry<String, Object> entry = it.next() ;
+			hql +=  " and " +  entry.getKey() + " like '" + entry.getValue()  +"'";
+			countHql += " and " +  entry.getKey() + " like '" + entry.getValue() +"'" ;
+		}
+		grid.setTotal(companyDao.count(countHql));
+		if(page!=null && rows !=null){
+			List<TCompany> lp = companyDao.find(hql,  Integer.valueOf(page),  Integer.valueOf(rows));
+			grid.setRows(copyToEntity(lp));
+		}else{
+			List<TCompany> l = companyDao.find(hql  );
+			grid.setRows(copyToEntity(l));
+      }	
+		return grid;
+	}
 
 	@Override
 	public Object getByKey(String key) {
@@ -93,6 +119,9 @@ public class CompanyServiceImpl implements CompanyServiceI{
 		}	
 		return grid;
 	}
+	
+	
+	
 	private List<TCompany> copyToEntity(List<TCompany> lc){
 		for(int i=0; i<lc.size(); i++){
 			TUser u = userService.getByCompanyId(lc.get(i).getId());

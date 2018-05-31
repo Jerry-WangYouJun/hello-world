@@ -89,7 +89,13 @@
 				text : '审核',
 				iconCls : 'icon-remove',
 				handler : function() {
-					order_check();
+					order_check('2');
+				}
+			}, '-', {
+				text : '取消审核',
+				iconCls : 'icon-remove',
+				handler : function() {
+					order_check('1');
 				}
 			}, '-', {
 				text : '确认收货',
@@ -370,10 +376,14 @@
 			});  */
 		}
 
-		function order_check() {
+		function order_check(status) {
 			var row = $('#table_order').datagrid('getSelected');
-			if( row.status != '1'){
+			if( row.status != '1' && status == '2'){
 				  alert("订单状态不是新订单，不能审核！");
+				  return false ;
+			}
+			if( row.status != '2' && status == '1'){
+				  alert("订单状态有误，不能取消审核！");
 				  return false ;
 			}
 			if (row) {
@@ -385,7 +395,8 @@
 							$.ajax({
 								url : '${pageContext.request.contextPath}/supplier!checkSupllierOrder.action',
 								data : {
-									"id" : row.id
+									"id" : row.id ,
+									"status":status
 								},
 								dataType : 'json',
 								success : function(obj) {

@@ -28,7 +28,7 @@
      <bean id="myTaskXml" class="com.saki.test.SupllierTask"></bean>  
   
     <task:scheduled-tasks>  
-        <task:scheduled ref="myTaskXml" method="getSupllierOrder" cron="0 0/2 * * * ?" />  
+        <task:scheduled ref="myTaskXml" method="getSupllierOrder" cron="0 0 0 * * ?" />  
     </task:scheduled-tasks>  
     
      

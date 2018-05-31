@@ -671,4 +671,9 @@ public class DateUtil {
 //	  }
 //	  //System.out.println("sss");
 //	 }
+	 
+	 public static void main(String[] args) {
+		String date =  getUserDate("yyyyMMddhh");
+		System.out.println(date);
+	}
 }

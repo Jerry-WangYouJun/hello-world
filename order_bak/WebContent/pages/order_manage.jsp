@@ -48,7 +48,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	$(function(){
     		var toolbar = [
     			{
-					text:'添加',
+					text:'添加订单',
 					iconCls: 'icon-add',
 					handler: function(){order_add();}
 				},'-',{
@@ -78,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			  orderUrl = '${pageContext.request.contextPath}/orderAction!loadByCompanyId.action';
     			  toolbar = [
     	    			{
-    						text:'添加',
+    						text:'添加订单',
     						iconCls: 'icon-add',
     						handler: function(){order_add();}
     					},'-',{
@@ -101,13 +101,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				pagination: true,
 				fitColumns: true,
 				singleSelect: true,
+				striped:true,
 				toolbar: toolbar,
+				rowStyler: function(index,row){
+					if (row.status  == '4'){
+						return 'background-color:#6293BB;color:#fff;'; // return inline style
+						// the function can return predefined css class and inline style
+						// return {class:'r1', style:{'color:#fff'}};	
+					}
+				},
 				columns:[[
 					{field:'id', hidden:'true',editor:'textbox' },
 					{field:'companyId', hidden:'true',editor:'textbox' },
 					{field:'companyName',title:'公司',width:100,align:'center'},
 					{field:'orderNo',title:'订单编号',width:100,align:'center'},
-					{field:'startDate',title:'下单时间',width:150,align:'center',
+					{field:'startDate',title:'交货时间',width:150,align:'center',
 						formatter: function(value,row,index){
 							if(value){
 								return value.substring(0,16);
@@ -203,6 +211,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    	}
 			   
 			});
+			
+			$(".datagrid-row-alt").css("backgroundColor" , "#a9f9f9")
 		});
     	
     	var editIndex = undefined;
@@ -216,7 +226,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					singleSelect: true,
 					onClickRow: onClickRow,//选中行是，调用onClickRow js方法（397行）
 					toolbar: [{
-						text:'添加',
+						text:'添加产品条目',
 						iconCls: 'icon-add',
 						handler: function(){append();}
 					},'-',{
@@ -228,7 +238,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						iconCls: 'icon-save',
 						handler: function(){accept();}
 					} */ ,'-',{
-						text:'取消',
+						text:'重置',
 						iconCls: 'icon-undo',
 						handler: function(){reject();}
 					},'-',{
@@ -336,7 +346,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					singleSelect: true,
    					onClickRow: onClickRow,//选中行是，调用onClickRow js方法（397行）
    					toolbar: [{
-   						text:'添加',
+   						text:'添加产品条目',
    						iconCls: 'icon-add',
    						handler: function(){append();}
    					},'-',{
@@ -348,7 +358,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						iconCls: 'icon-save',
    						handler: function(){accept();}
    					} */ ,'-',{
-   						text:'取消',
+   						text:'重置',
    						iconCls: 'icon-undo',
    						handler: function(){reject();}
    					},'-',{
@@ -605,12 +615,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			}
     	}
-    	
     	function company_close(){
-			document.getElementById('order_form').reset();
-			$('#order_dlg').dialog('close');	
-			$('#table_order').datagrid('reload');
-		}
+    		$.messager.confirm('提示','关闭之后当前所做的修改都不会执行，确认关闭？',
+    				function(r) {
+    					if (r) {
+    						document.getElementById('order_form').reset();
+    						$('#order_dlg').dialog('close');	
+    						$('#table_order').datagrid('reload');
+    					}
+    				});
+    	}
     </script>
     
     <script type="text/javascript">
@@ -659,37 +673,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			editIndex = undefined;
 		}
 		function submitData() {
-			if (endEditing()) { 
-		                //利用easyui控件本身的getChange获取新添加，删除，和修改的内容  
-		            if ($("#table_add").datagrid('getChanges').length) {  
-		                    var inserted = $("#table_add").datagrid('getChanges', "inserted");  
-		                    var deleted = $("#table_add").datagrid('getChanges', "deleted");  
-		                    var updated = $("#table_add").datagrid('getChanges', "updated");
-		                		var data = $('#order_form').serialize();
-		                    var effectRow = new Object();  
-		                    effectRow["formData"] = data;
-		                    if (inserted.length) { 
-		                        effectRow["inserted"] = JSON.stringify(inserted);  
-		                    }  
-		                    if (deleted.length) {  
-		                        effectRow["deleted"] = JSON.stringify(deleted);  
-		                    }  
-		                    if (updated.length) {  
-		                        effectRow["updated"] = JSON.stringify(updated);  
-		                    } 
-		                    $.post("${pageContext.request.contextPath}/orderAction!getChanges.action?"  + data  , effectRow, function(obj) {
-		                				if(obj.success){
-		    			    				 	alert(obj.msg);
-		    			    				 	 $('#order_dlg').dialog('close');	
-		    			    				 	$('#table_order').datagrid('reload');
-		    			    				}else{
-		    			    					alert(obj.msg);
-		    			    					 $('#order_dlg').dialog('close');	
-		    			    					$('#table_order').datagrid('reload');
-		    			    				}
-		                    }, "JSON");
-		              }
-				} 
+				$.messager.confirm('提示','提交将保存当前所有修改，确定执行？',
+    				function(r) {
+    					if (r) {
+    						if (endEditing()) { 
+    			                //利用easyui控件本身的getChange获取新添加，删除，和修改的内容  
+    			            if ($("#table_add").datagrid('getChanges').length) {  
+    			                    var inserted = $("#table_add").datagrid('getChanges', "inserted");  
+    			                    var deleted = $("#table_add").datagrid('getChanges', "deleted");  
+    			                    var updated = $("#table_add").datagrid('getChanges', "updated");
+    			                		var data = $('#order_form').serialize();
+    			                    var effectRow = new Object();  
+    			                    effectRow["formData"] = data;
+    			                    if (inserted.length) { 
+    			                        effectRow["inserted"] = JSON.stringify(inserted);  
+    			                    }  
+    			                    if (deleted.length) {  
+    			                        effectRow["deleted"] = JSON.stringify(deleted);  
+    			                    }  
+    			                    if (updated.length) {  
+    			                        effectRow["updated"] = JSON.stringify(updated);  
+    			                    } 
+    			                    $.post("${pageContext.request.contextPath}/orderAction!getChanges.action?"  + data  , effectRow, function(obj) {
+    			                				if(obj.success){
+    			    			    				 	alert(obj.msg);
+    			    			    				 	 $('#order_dlg').dialog('close');	
+    			    			    				 	$('#table_order').datagrid('reload');
+    			    			    				}else{
+    			    			    					alert(obj.msg);
+    			    			    					 $('#order_dlg').dialog('close');	
+    			    			    					$('#table_order').datagrid('reload');
+    			    			    				}
+    			                    }, "JSON");
+    			              }
+    						}
+    					}
+    				});
 			}
 	 </script>
 </body>

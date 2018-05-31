@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>订单管理</title>
+    <title>客户/供应商管理</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -27,13 +27,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body class="easyui-layout">
  	<div data-options="region:'north',border:false,showHeader:false"  style="height:40px" >
- 		<p style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">企业管理</p>
+ 		<p style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">客户/供应商管理</p>
  	</div>
  	<div data-options="region:'center',border:false,showHeader:false" style="padding-bottom: 3px">
+ 			 <div >
+            	公司名称：
+                <input name="name" id = "cname"class=" form-control" style="display: inline-block;width: 10%">
+            	企业类型：
+                <select name="roleId" id="roleId" 
+                    		class="form-control select2 easyui-combobox" style="width: 10%;" editable="false">
+                    <option value="">-选择-</option>
+                	<option value="2">供货商</option>
+                	<option value="3">客户</option>
+                </select>
+                <button onclick="query()">查询</button>
+            </div> 
  		<table id="company_table" class="easyui-datagrid" fit="true" ></table>
  	</div>
-	
-	
 	<div id="toolbar_company" style="padding:2px 5px;">
      	<a onclick="company_add()" class="easyui-linkbutton"  plain="true" iconCls="fa fa-plus fa-fw" style="margin: 2px">新增</a>
         <a onclick="company_edit()" class="easyui-linkbutton"  plain="true" iconCls="fa fa-edit fa-fw" style="margin: 2px">编辑</a>    
@@ -41,6 +51,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
 	
     <script type="text/javascript">
+    function query(){
+    	$('#company_table').datagrid('load', {
+    	    name: $("#cname").val(),
+    	    roleId: $("#roleId").val()
+    	});
+    }
     	$(function(){
 			$('#company_table').datagrid({
 				url:'${pageContext.request.contextPath}/companyAction!loadAll.action',

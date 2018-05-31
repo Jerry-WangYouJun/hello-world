@@ -97,6 +97,7 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	
 	public void searchDetail() {
 		String id = getParameter("id");
+		String orderNo = getParameter("orderNo");
 		if(!StringUtils.isEmpty(id)) {
 			List<Map<String,Object>>  list = orderService.searchDetail(id);
 			String jsonString = JSON.toJSONString(list);
@@ -147,7 +148,8 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 				   companyId = String.valueOf((Integer)getSession().getAttribute("companyId"));
 			 }
 			 order  = new TOrder();
-			 order.setOrderNo("cus_" +  DateUtil.getStringDateShort());
+			 String dayOfOrderNo = DateUtil.getUserDate("yyyyMMdd");
+			 order.setOrderNo("KH"  + dayOfOrderNo +  orderService.getOrderCode(dayOfOrderNo) );
 			 order.setCompanyId(Integer.valueOf(companyId));
 			 order.setStartDate(new Date());
 			 order.setStatus("1");//新订单
@@ -233,6 +235,18 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 			String id = getParameter("id");
 			String status = getParameter("status");
 			TOrder order = (TOrder)orderService.getByKey(id);
+			switch (status) {
+			case "2":
+				
+				break;
+			case "3":
+				order.setPillDate(new Date());
+				break;
+			case "4":
+				order.setEndDate(new Date());
+				break;
+
+			}
 			order.setStatus(status);
 			orderService.update(order);
 			j.setSuccess(true);

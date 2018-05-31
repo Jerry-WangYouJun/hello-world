@@ -70,7 +70,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i>信息管理<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="#"  onclick="openTab('<%=path%>/pages/company_manage.jsp')">公司管理</a>
+                        <a href="#"  onclick="openTab('<%=path%>/pages/company_manage.jsp')">客户/供应商管理</a>
                     </li>
                     <li>
                         <a href="#"  onclick="openTab('<%=path%>/pages/user_manage.jsp')">用户管理</a>

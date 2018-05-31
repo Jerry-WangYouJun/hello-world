@@ -134,7 +134,7 @@ public class OrderServiceImpl implements OrderServiceI{
 	}
 	@Override
 	public List<Map<String, Object>> searchDetail(String id ) {
-		int  num = orderDao.count("from  TOrder o , TOrderMapping m  where o.id = m.orderId ");
+		int  num = orderDao.count("from  TOrder o , TOrderMapping m  where o.id = m.orderId and o.id= " + id );
 		//如果生成了供应商订单 则关联供应商订单查询返回结果（有供应商报价就带出报价），如果没有只关联查询订单信息
 		if(num <= 0 ){
 			  return searchDetailNullPrice(id);
@@ -277,6 +277,22 @@ public class OrderServiceImpl implements OrderServiceI{
 			orderDao.updateHql("update TOrder t set t.locked = 1 where t.status = '3'");
 			orderDao.updateHql("update TOrder t set t.remark='未付款，不予采购' where t.status < 3");
 		}
+	}
+	@Override
+	public String getOrderCode(String dayOfOrderNo) {
+		String hql = "select  SUBSTR(max(t.orderNo) ,LENGTH(max(t.orderNo))-2 ,3) + 1  "
+				+ " from TOrder  t  where t.orderNo like '%" + dayOfOrderNo +  "%'";
+		List<Integer> list =orderDao.find(hql);
+		if(list.size() > 0){
+			String resultStr = list.get(0) + "";
+			if(resultStr.length() ==1  ){
+				resultStr = "00" + resultStr;
+			}else if(resultStr.length() == 2 ){
+				resultStr = "0" + resultStr;
+			}
+			 return  resultStr;
+		}
+		return dayOfOrderNo + "001";
 	}
 	
 }

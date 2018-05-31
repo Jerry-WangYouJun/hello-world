@@ -169,14 +169,15 @@ public class SupplierOrderAction extends BaseAction implements ModelDriven<TSupl
 		Message j = new Message();
 		try {
 			String id = getParameter("id");
+			String status = getParameter("status");
 			TSupllierOrder order = (TSupllierOrder)supllierOrderService.getByKey(id);
 			if(order !=  null){
-				order.setStatus("2");
+				order.setStatus(status);
 			}
 			supllierOrderService.update(order);
-			supllierOrderService.updateOrderStatus();
+		//	supllierOrderService.updateOrderStatus(id);
 				j.setSuccess(true);
-				j.setMsg("审核成功");
+				j.setMsg("操作成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			j.setSuccess(false);

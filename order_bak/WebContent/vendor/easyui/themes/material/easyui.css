@@ -1835,7 +1835,7 @@
   border-collapse: separate;
 }
 .datagrid-row-alt {
-  background: #f9f9f9;
+  background: #eeeeee;
 }
 .datagrid-row-over,
 .datagrid-header td.datagrid-header-over {

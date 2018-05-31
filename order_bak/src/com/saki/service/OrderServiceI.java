@@ -27,4 +27,6 @@ public interface OrderServiceI extends BaseServiceI{
 	void updateOrderLocked(String locked, String id);
 	
 	void updateOrderLockedTask();
+
+	String getOrderCode(String dayOfOrderNo);
 }

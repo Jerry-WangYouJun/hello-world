@@ -35,5 +35,6 @@ public interface SupllierOrderServiceI  extends BaseServiceI{
 
 	String updateSupllierPrice(String update);
 
-	void updateOrderStatus();
+	void updateOrderStatus(String id);
+
 }

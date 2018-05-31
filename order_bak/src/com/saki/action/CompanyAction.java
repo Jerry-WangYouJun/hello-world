@@ -1,7 +1,11 @@
 package com.saki.action;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -19,6 +23,8 @@ import com.saki.service.UserServiceI;
 @Action(value="companyAction")
 public class CompanyAction extends BaseAction implements ModelDriven<TCompany>{
 
+	private static final Logger logger = Logger.getLogger(CompanyAction.class);
+	
 	private TCompany company = new TCompany();
 	private CompanyServiceI companyService;
 	private UserServiceI userService;
@@ -41,7 +47,17 @@ public class CompanyAction extends BaseAction implements ModelDriven<TCompany>{
 		this.companyService = companyService;
 	}
 	public void loadAll(){
-		super.writeJson(companyService.loadAll(sort, order, page, rows));
+		String name = getParameter("name");
+		String roleId = getParameter("roleId");
+		Map map = new HashMap();
+		if(StringUtils.isNotEmpty(name)){
+			map.put("name", "%"+name + "%");
+		}
+		if(StringUtils.isNotEmpty(roleId)){
+			map.put("roleId", roleId);
+		}
+		super.writeJson(companyService.loadQuery(sort, order, page, rows, map));
+		
 	}
 	public void listAll(){
 		super.writeJson(companyService.loadAll(sort, order, page, rows).getRows());
@@ -104,6 +120,8 @@ public class CompanyAction extends BaseAction implements ModelDriven<TCompany>{
 	public void search(){
 		super.writeJson(companyService.search(name, value,sort, order, page, rows));
 	}
+	
+	
 	
 	
 	public void writeJson(Object object){
