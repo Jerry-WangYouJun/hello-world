@@ -256,7 +256,10 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 		System.out.println(new Date());
 	}
 	@Override
-	public void getSupllierOrder() {
+	public int getSupllierOrder() {
+		String deleteDetail = "delete from TSupllierOrderDetail t where t.supllierOrderId in ("
+				+ "  select  id from TSupllierOrder where status = 1)  ";
+		supplierOrderDao.updateHql(deleteDetail);
 		String hql = "delete from TSupllierOrder where status = 1 ";
 		supplierOrderDao.updateHql(hql);
 		TSupllierOrder supOrder = new TSupllierOrder();
@@ -283,6 +286,10 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
  		  	  }
 	    }
 	    
+	    if(orderDetailList == null ||orderDetailList.size() == 0 ){
+	    	 return 0;
+	    }
+	    
 	    /**  插入供应商订单*/
 	    supOrder.setAmount(amount);
 	    supOrder.setStatus("1");//0代表新订单状态
@@ -307,6 +314,8 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	    	 mapping.setSuppilerOrderId(supOrder.getId());
 	    	 add(mapping);
 	    }
+	    
+	    return orderDetailList.size();
 	    
 	}
 	private List<TOrderDetail> getOrderDetailsForSupplierOrder() {

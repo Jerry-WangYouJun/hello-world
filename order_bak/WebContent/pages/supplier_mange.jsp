@@ -15,9 +15,6 @@
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
-<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
 <jsp:include page="/common.jsp"></jsp:include>
 </head>
 <body class="easyui-layout">
@@ -132,14 +129,20 @@
 					}
 				} ];
 			}
-			$('#table_order')
-					.datagrid(
-							{
+			$('#table_order').datagrid({
 								url : searchUrl,
 								pagination : true,
 								fitColumns : true,
+								striped:true,
 								singleSelect : true,
 								toolbar :toolbar ,
+								rowStyler: function(index,row){
+									if (row.status  == '4'){
+										return 'background-color:#6293BB;color:#fff;'; // return inline style
+										// the function can return predefined css class and inline style
+										// return {class:'r1', style:{'color:#fff'}};	
+									}
+								},
 								columns : [ [
 								{field : 'id',hidden : 'true',editor : 'textbox'}, 
 								{field : 'supplierOrderNo',title : '供应商订单',width : 100,align : 'center'}, 
@@ -233,12 +236,12 @@
 		var editIndex = undefined;
 		$(function() {
 			if("${roleId}" == '1'){
-				$('#table_add').datagrid(
-						{
+				$('#table_add').datagrid({
 							url : '${pageContext.request.contextPath}/supplier!searchDetail.action',
 							pagination : true,
 							fitColumns : true,
 							singleSelect : true,
+							striped:true,
 							onClickRow : onClickRow,
 							toolbar : [ {
 								text : '删除',
@@ -253,7 +256,7 @@
 									order_split();
 								}
 							}, '-', {
-								text : '取消',
+								text : '重置',
 								iconCls : 'icon-undo',
 								handler : function() {
 									reject();
@@ -310,11 +313,11 @@
 
 						});
 			}else if("${roleId}" == '2'){
-				$('#table_add').datagrid(
-						{
+				$('#table_add').datagrid({
 							url : '${pageContext.request.contextPath}/supplier!searchDetail.action',
 							pagination : true,
 							fitColumns : true,
+							striped:true,
 							singleSelect : true,
 							onClickRow : onClickRow,
 							toolbar : [ {
@@ -544,9 +547,15 @@
 		}
 
 		function company_close() {
-			document.getElementById('order_form').reset();
-			$('#order_dlg').dialog('close');
-			$('#table_order').datagrid('reload');
+			
+			$.messager.confirm('提示','关闭之后当前所做的修改都不会执行，确认关闭？',
+    				function(r) {
+    					if (r) {
+    						document.getElementById('order_form').reset();
+    						$('#order_dlg').dialog('close');
+    						$('#table_order').datagrid('reload');
+    					}
+    		});
 		}
 	</script>
 

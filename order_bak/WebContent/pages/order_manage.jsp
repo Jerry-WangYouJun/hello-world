@@ -43,7 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</div>
 	<div id="company_dlg_buttons" style="width:600px;height: 40px;text-align: center">
 			<button onclick="company_close()" type="button" class="btn btn-default btn-dialog-right">关闭</button>
-		</div>
+	</div>
     <script type="text/javascript">
     	$(function(){
     		var toolbar = [
@@ -224,6 +224,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					pagination: true,
 					fitColumns: true,
 					singleSelect: true,
+					striped:true,
 					onClickRow: onClickRow,//选中行是，调用onClickRow js方法（397行）
 					toolbar: [{
 						text:'添加产品条目',
@@ -344,6 +345,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					pagination: true,
    					fitColumns: true,
    					singleSelect: true,
+   					striped:true,
    					onClickRow: onClickRow,//选中行是，调用onClickRow js方法（397行）
    					toolbar: [{
    						text:'添加产品条目',

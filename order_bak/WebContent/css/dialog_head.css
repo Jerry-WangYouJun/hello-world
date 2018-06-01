@@ -41,3 +41,6 @@ a.c1:hover{
 	margin:0px 20px 2px 20px;
 	float: right;
 }
+.error{
+	color:red;
+}

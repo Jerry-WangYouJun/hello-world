@@ -20,7 +20,7 @@ public interface SupllierOrderServiceI  extends BaseServiceI{
 
 	void getOrderDetail();
 
-	void getSupllierOrder();
+	int getSupllierOrder();
 
 	void splitOrder(String id);
 

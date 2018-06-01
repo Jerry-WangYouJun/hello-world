@@ -46,6 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				pagination: true,
 				toolbar:'#toolbar_user',				
 				fitColumns: true,
+				striped:true,
 				singleSelect: true,
 				columns:[[
 					{field:'userName',title:'姓名',width:100,align:'center'},

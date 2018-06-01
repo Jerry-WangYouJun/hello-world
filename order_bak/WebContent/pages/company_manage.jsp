@@ -22,7 +22,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
     
    <jsp:include page="/common.jsp"></jsp:include>
-
   </head>
   
   <body class="easyui-layout">
@@ -63,6 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				pagination: true,
 				toolbar:'#toolbar_company',				
 				fitColumns: true,
+				striped:true,
 				singleSelect: true,
 				columns:[[
 					{field:'name',title:'公司名称',width:100,align:'center'},
@@ -81,19 +81,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$('#company_dlg').dialog('open');	
 			$('#company_dlg').dialog('setTitle','添加企业');
 			$("#company_save").unbind('click').click(function(){
-  				$.ajax({
-					url : '${pageContext.request.contextPath}/companyAction!add.action',
-					data : $('#company_form').serialize(),
-					dataType : 'json',
-					success : function(obj) {
-						if (obj.success) {
-							alert(obj.msg);
-							company_close();
-						} else {
-							alert(obj.msg);
-						}
-					}
-				});
+				if($("#company_form").validate().form()){
+		  				$.ajax({
+							url : '${pageContext.request.contextPath}/companyAction!add.action',
+							data : $('#company_form').serialize(),
+							dataType : 'json',
+							success : function(obj) {
+								if (obj.success) {
+									alert(obj.msg);
+									company_close();
+								} else {
+									alert(obj.msg);
+								}
+							}
+						});
+				}
+				
 			});
 		}
 		function company_edit(){
@@ -103,19 +106,21 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			$('#company_dlg').dialog('setTitle','编辑企业');
     			$('#company_form').form('load', row);
 				$("#company_save").unbind('click').click(function(){
-  					$.ajax({
-						url : '${pageContext.request.contextPath}/companyAction!update.action',
-						data : $('#company_form').serialize(),
-						dataType : 'json',
-						success : function(obj) {
-							if (obj.success) {
-								alert(obj.msg);
-								company_close();
-							} else {
-								alert(obj.msg);
+					if($("#company_form").validate().form()){
+	  					$.ajax({
+							url : '${pageContext.request.contextPath}/companyAction!update.action',
+							data : $('#company_form').serialize(),
+							dataType : 'json',
+							success : function(obj) {
+								if (obj.success) {
+									alert(obj.msg);
+									company_close();
+								} else {
+									alert(obj.msg);
+								}
 							}
-						}
-					});
+						});
+					}
 				});
 			}
     	}
@@ -146,11 +151,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			}
 		}
 		function company_close(){
-			$('#company_form').form('reset');
-			$('#company_form').form('clear');
-			$('#company_dlg').dialog('close');	
-			$('#company_table').datagrid('reload');
+			$.messager.confirm('提示','关闭之后当前所做的修改都不会执行，确认关闭？',
+    				function(r) {
+    					if (r) {
+    						$('#company_form').form('reset');
+    						$('#company_form').form('clear');
+    						$('#company_dlg').dialog('close');	
+    						$('#company_table').datagrid('reload');
+    						$('label.error').remove();
+    						$('.error').removeClass("error");
+    					}
+    		});
 		}
+		
+		
+		$(function(){
+			$("#company_form").validate();
+		})
+		
     </script>
     
     <div id="company_dlg_buttons" style="width:800px;height: 40px;text-align: center">
@@ -164,52 +182,52 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<form id="company_form" role="form" style="padding: 20px">
     		<div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">公司名称：</label>
-                <input name="name" class=" form-control" style="display: inline-block;width: 70%">
+                <input name="name" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">企业类型：</label>
                 <select name="roleId" id="roleId" 
-                    		class="form-control select2 easyui-combobox" style="width: 70%;height: 86%" editable="false">
+                    		class="form-control select2 easyui-combobox" style="width: 45%;height: 86%" editable="false">
                 	<option value="2">供货商</option>
                 	<option value="3">客户</option>
                 </select>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">登录账号：</label>
-                <input name="userName" class=" form-control" style="display: inline-block;width: 70%">
+                <input name="userName" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">联系人：</label>
-                <input name="contacts" class=" form-control" style="display: inline-block;width: 70%">
+                <input name="contacts" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">主营业务：</label>
-                <input name="business" class=" form-control" style="display: inline-block;width: 70%">
+                <input name="business" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">企业星级：</label>
-                <input name="level" class=" form-control" style="display: inline-block;width: 70%">
+                <input name="level" class=" form-control" style="display: inline-block;width: 45%" >
             </div>
             
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">联系电话：</label>
-                <input name="telphone" class=" form-control"  style="display: inline-block;width: 70%">
+                <input name="telphone" class=" form-control"  style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">税号：</label>
-                <input name="tax" class=" form-control" style="display: inline-block;width: 70%">
+                <input name="tax" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">银行账号：</label>
-                <input name="card" class=" form-control" style="display: inline-block;width: 70%">
+                <input name="card" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">地址：</label>
-                <textarea name="address" class=" form-control" style="display: inline-block;width: 70%"></textarea>
+                <textarea name="address" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required></textarea>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">备注：</label>
-                <textarea name="remark" class=" form-control" rows="4" style="display: inline-block;width: 70%"></textarea>
+                <textarea name="remark" class=" form-control" rows="2" style="display: inline-block;width: 45%"></textarea>
             </div>
             <input id="id" name="id" style="display:none;"/> 
     	</form>                 

@@ -10,6 +10,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="<%=path%>/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 <script src="<%=path%>/vendor/jquery/jquery.min.js"></script>
+<script src="<%=path%>/js/jquery.validate.min.js"></script>
+<script src="<%=path%>/js/jquery.metadata.js"></script>
+<script src="<%=path%>/js/messages_zh.js"></script>
 
 <script src="<%=path%>/vendor/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=path%>/vendor/metisMenu/metisMenu.min.js"></script>

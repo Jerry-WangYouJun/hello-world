@@ -47,6 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				pagination: true,
 				toolbar:'#toolbar_info',				
 				fitColumns: true,
+				striped:true,
 				singleSelect: true,
 				columns:[[
 					{field:'confirmDate',title:'采购日期',width:100,align:'center'},
@@ -141,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<form id="info_form" role="form" style="padding: 20px">
     		<div class="form-group col-md-12">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">采购时间：</label>
-                <input name="confirmDate" class=" form-control" style="display: inline-block;width: 70%"><span style="color:red">*请填写合法的日期数字</span>
+                <input name="confirmDate" class=" form-control" style="display: inline-block;width: 70%"><span style="color:red">*为保证系统正常运行，请填写1-28的整数</span>
             </div>
             <div class="form-group col-md-12">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">备注：</label>

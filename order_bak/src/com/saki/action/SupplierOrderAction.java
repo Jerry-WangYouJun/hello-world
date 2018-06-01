@@ -234,9 +234,14 @@ public class SupplierOrderAction extends BaseAction implements ModelDriven<TSupl
 	public void getSupllierOrder(){
 		Message j = new Message();
 		try {
-			supllierOrderService.getSupllierOrder();
-			j.setSuccess(true);
-			j.setMsg("操作成功");
+			int num =  supllierOrderService.getSupllierOrder();
+			if(num >0){
+				j.setSuccess(true);
+				j.setMsg("操作成功");
+			}else{
+				j.setSuccess(false);
+				j.setMsg("当前不存在已锁定的订单");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			j.setSuccess(false);
