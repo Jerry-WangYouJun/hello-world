@@ -1,6 +1,5 @@
 package com.saki.service.impl;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -21,6 +20,7 @@ import com.saki.model.TOrderDetail;
 import com.saki.model.TProduct;
 import com.saki.model.TProductDetail;
 import com.saki.model.TSupllierOrderDetail;
+import com.saki.model.TUserProduct;
 import com.saki.service.OrderServiceI;
 
 @Service("orderService")
@@ -294,5 +294,119 @@ public class OrderServiceImpl implements OrderServiceI{
 		}
 		return dayOfOrderNo + "001";
 	}
+	
+	@Override
+	public List<TProduct> searchProductByCompanyId(String companyId) {
+		// TODO Auto-generated method stub
+		StringBuffer sb  = new StringBuffer();
+		sb.append(" select  t.id,t.product,t.unit  from  TProduct  t ,TProduct t1 ");	
+		sb.append("  where t.id  in  (  ");
+		sb.append(" select detail.productId from  TProductDetail  detail ,TUserProduct user   ");
+		sb.append(" where user.companyId = :companyId    ");
+		sb.append("  and     user.productDetailId = detail.productId        )   ");
+		sb.append(" and  t1.id =  t.parentId    ");
+		Map<String , Object >  map = new HashMap<String,Object>();
+		map.put("companyId", Integer.parseInt(companyId));
+		List<TProduct> list = null;
+		try {
+			list = orderDao.find(sb.toString(), map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int count = list.size();
+		return list;
+	}
+	@Override
+	public List<TProductDetail> searchDetailByCompanyId(String companyId) {
+		// TODO Auto-generated method stub
+		
+		String hql = "from  TUserProduct user  where user.companyId = "+companyId;
+		List<TUserProduct> userList = orderDao.find(hql);
+		String detailIds = "";
+		for (TUserProduct tUserProduct : userList) {
+			detailIds += tUserProduct.getProductDetailId()+",";
+		}
+		detailIds = detailIds.substring(0, detailIds.length()-1);
+		String hql1 = " from  TProductDetail detail where  detail.id in  ("+detailIds+")  ";
+		
+		
+		List<TProductDetail> list = orderDao.find(hql1);
+		String parentId ="";
+		/*for (TProductDetail tProductDetail : list) {
+			parentId += tProductDetail.getProduct().getParentProduct().getId()+"";
+		}	*/
+		return list;
+	}
+	
+	
+	
+	@Override
+	public List<TProduct> searchProductByProductIds(String productIds) {
+		// TODO Auto-generated method stub
+		StringBuffer sb  = new StringBuffer();
+		sb.append("  from  TProduct  product where  product.id in  ( "+ productIds+")");
+		List<TProduct> list = orderDao.find(sb.toString());
+		
+		return list;
+	}
+	
+	@Override
+	public List<TProduct> searchProductTypeByParentId(String parentId) {
+		// TODO Auto-generated method stub
+		String hql = " from TProduct t where  t.parentId = "+parentId;
+		List<TProduct> list= orderDao.find(hql);		
+		return list;
+	}
+	//查询所有已选产品
+	@Override
+	public List<TUserProduct> searchUserProductByCompanyId(String companyId) {
+		// TODO Auto-generated method stub
+		String hql = "from  TUserProduct  t  where t.companyId = :companyId";
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("companyId", Integer.parseInt(companyId));
+		List<TUserProduct> userProduct = orderDao.find(hql,map);		
+		return userProduct;
+	}
+	@Override
+	public List<TProductDetail> searchDetailByIds(String ids) {
+		// TODO Auto-generated method stub
+		String hql = "from  TProductDetail  detail  where  detail.id in ("+ids+") ";
+		
+		return orderDao.find(hql);
+	}
+	@Override
+	public TProduct searchProductByProductId(Integer productId) {
+		// TODO Auto-generated method stub
+		String hql = "from TProduct  product  where  product.id =:id ";
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("id", productId);
+		TProduct product = (TProduct)orderDao.get(hql, params);
+		return product;
+	}
+	@Override
+	public List<TProduct> searchProductByproductIds(String productIds) {
+		// TODO Auto-generated method stub
+		String hql ="from  TProduct product where product.id  in ("+productIds+")";
+		return orderDao.find(hql);
+	}
+	@Override
+	public List<TProduct> searchProductByProductIdsAndParentId(String productIds, String parentId) {
+		// TODO Auto-generated method stub
+		StringBuffer sb  = new StringBuffer();
+		sb.append("  from  TProduct  product where  product.id in  ( "+ productIds+")  and parent_id =:parentId");
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("parentId", parentId);
+		List<TProduct> list = orderDao.find(sb.toString(),params);	
+		return list;
+	}
+	
+	@Override
+	public List<TProduct> searchFirstProduct() {
+		// TODO Auto-generated method stub
+		String hql ="from  TProduct product where parent_id is null ";
+		return orderDao.find(hql);
+	}
+	
 	
 }

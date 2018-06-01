@@ -1,8 +1,11 @@
 package com.saki.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import com.saki.service.UserProductServiceI;
 @Service("productService")
 public class ProductServiceImpl implements ProductServiceI{
 
+	private static final Logger logger = Logger.getLogger(ProductServiceImpl.class);
 	private BaseDaoI produceDao;
 	public BaseDaoI getProduceDao() {
 		return produceDao;
@@ -193,6 +197,102 @@ public class ProductServiceImpl implements ProductServiceI{
 		}
 		
 	}
+	
+	public ArrayList<Product> listAll1()
+	{
+		ArrayList<Product> productList = new ArrayList<Product>();
+		String hql = "from   TProduct t  where  t.parentId is null ";
+		String hql1 = " from  TProduct t  where t.parentId =:parentId";
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		List<TProduct> products = produceDao.find(hql);
+		logger.info(products.size()+"products ");
+		for (TProduct tProduct : products) {
+			//创建新的 product  
+			Product product = new Product();
+			product.setUnit(tProduct.getUnit());
+			product.setProduct(tProduct.getProduct());				
+			//查询product 的 二级类型
+			map.put("parentId", tProduct.getId()+"");
+			List<TProduct> productType =null;
+			try {
+				productType = produceDao.find(hql1,map);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//封装成 productType 对象
+			ArrayList<ProductType> typeList = new ArrayList<ProductType>();
+			for (TProduct tProduct2 : productType) {
+				ProductType type = new ProductType();
+				type.setBase(tProduct2.getBase());
+				type.setProduct(tProduct2.getProduct());
+				type.setType(tProduct2.getProduct());
+				ArrayList<TProductDetail> children = (ArrayList<TProductDetail>)productDetailService.loadByProductId(tProduct2.getId());		
+				for (TProductDetail tProductDetail : children) {
+					tProductDetail.setSelected(0);
+				}
+				type.setChildren(children);
+				typeList.add(type);
+			}		
+		
+			product.setChildren(typeList);
+			productList.add(product);			
+		}		
+		return productList;
+	}
+	
+	public ArrayList<Product> listByCompany1(int companyId) {
+			
+			//取出产品 （焊丝）
+			String hql = "from   TProduct t  where  t.parentId is null ";
+			String hql1 = " from  TProduct t  where t.parentId =:parentId";
+			ArrayList<Product> productList = new ArrayList<Product>();
+			//用户选择的detail id
+			ArrayList<Integer> detailIds = userProductService.getIdByCompany(companyId);		
+			if(detailIds == null||detailIds.size() ==0)
+			return  listAll1();
+			//循环 
+			List<TProduct> products = produceDao.find(hql);
+			Map<String,Object> map = new HashMap<String,Object>();
+			logger.info("products Size = "+products.size());
+	
+			for (TProduct tProduct : products) {
+						//创建新的 product  
+						Product product = new Product();
+						product.setUnit(tProduct.getUnit());
+						product.setProduct(tProduct.getProduct());				
+						//查询product 的 二级类型
+						map.put("parentId", tProduct.getId()+"");
+						List<TProduct> productType = produceDao.find(hql1,map);
+						//封装成 productType 对象
+						ArrayList<ProductType> typeList = new ArrayList<ProductType>();
+						for (TProduct tProduct2 : productType) {
+							ProductType type = new ProductType();
+							type.setBase(tProduct2.getBase());
+							type.setProduct(tProduct2.getProduct());
+							type.setType(tProduct2.getProduct());
+							ArrayList<TProductDetail> children = (ArrayList<TProductDetail>)productDetailService.loadByProductId(tProduct2.getId());							
+							for (TProductDetail tProductDetail : children) {
+								tProductDetail.setSelected(0);
+								for (int i = 0; i < detailIds.size(); i++) {
+									if(detailIds.get(i).equals(tProductDetail.getId()))
+									{
+										tProductDetail.setSelected(1);
+									}								
+								}
+							}
+							
+							type.setChildren(children);
+							typeList.add(type);
+						}		
+					
+						product.setChildren(typeList);
+						productList.add(product);			
+					}
+			return productList;
+		}
+	
 	public UserProductServiceI getUserProductService() {
 		return userProductService;
 	}

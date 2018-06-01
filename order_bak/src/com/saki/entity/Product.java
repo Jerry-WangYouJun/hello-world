@@ -6,7 +6,13 @@ import com.saki.model.TProductDetail;
 public class Product {
 
 	private String product;
-	
+	private String unit;
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
 	private ArrayList<ProductType> children;
 
 	public String getProduct() {

@@ -36,7 +36,7 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 		super.writeJson(productService.listAll());
 	}
 	public void loadByCompanyId(){
-		super.writeJson(productService.listByCompany(Integer.valueOf(getSession().getAttribute("companyId").toString())));
+		super.writeJson(productService.listByCompany1(Integer.valueOf(getSession().getAttribute("companyId").toString())));
 	}
 	public void saveUserProduct(){
 		Message j = new Message();

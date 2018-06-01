@@ -1,6 +1,7 @@
 package com.saki.action;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import com.saki.model.TOrder;
 import com.saki.model.TOrderDetail;
 import com.saki.model.TProduct;
 import com.saki.model.TProductDetail;
+import com.saki.model.TUserProduct;
 import com.saki.service.OrderServiceI;
 import com.saki.utils.DateUtil;
 import com.saki.utils.SystemUtil;
@@ -107,11 +109,107 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		
 	}
 	
-	public void getProduct() {
+	/*public void getProduct() {
 		List<TProduct>  list = orderService.searchProduct();
 		String jsonString = JSON.toJSONString(list);
 		JSONArray jsonArray = JSONArray.parseArray(jsonString);
 		super.writeJson(jsonArray);
+	}*/
+	public void getAllProduct(){
+		List<TProduct> list = null;
+		list = orderService.searchFirstProduct();
+		String jsonString = JSON.toJSONString(list);
+		JSONArray jsonArray = JSONArray.parseArray(jsonString);
+		super.writeJson(jsonArray);
+		
+	}
+	
+	public void getAllProductType(String parentId)
+	{
+		List<TProduct> list = null;
+		list = orderService.searchProductTypeByParentId(parentId);
+		String jsonString = JSON.toJSONString(list);
+		JSONArray jsonArray = JSONArray.parseArray(jsonString);
+		super.writeJson(jsonArray);
+		
+	}
+	
+	public void getProduct() {
+		String companyId  = String.valueOf((Integer)getSession().getAttribute("companyId"));
+		if(companyId =="null")
+		{
+			getAllProduct();
+			return;
+		}
+		List<TProduct> list =new ArrayList<TProduct>();
+		//获取 用户选择的 userDetaillist
+		List<TUserProduct> userProductList = orderService.searchUserProductByCompanyId(companyId);
+		String ids = "";
+		String productIds = "";
+		String firstProductIds = "";
+		for (TUserProduct tUserProduct : userProductList) {
+			ids+= tUserProduct.getProductDetailId()+",";
+		}
+		ids = ids.substring(0, ids.length()-1);
+		//获取所有 details
+		List<TProductDetail> details = orderService.searchDetailByIds(ids);
+		
+		for (TProductDetail tProductDetail : details) {
+			productIds+= tProductDetail.getProductId()+",";
+		}
+		productIds = productIds.substring(0, productIds.length()-1);
+		List<TProduct> secProduct = orderService.searchProductByProductIds(productIds);
+		for (TProduct tProduct : secProduct) {
+			firstProductIds += tProduct.getParentId()+",";
+		}
+		firstProductIds = firstProductIds.substring(0, firstProductIds.length()-1);
+		list = orderService.searchProductByproductIds(firstProductIds);
+		String jsonString = JSON.toJSONString(list);
+		JSONArray jsonArray = JSONArray.parseArray(jsonString);
+		super.writeJson(jsonArray);
+	}
+	
+	//获取 二级 产品类型 （也需要通过 companyId 获取 tuserProduct 中的 detail ）
+	public void getProductTypeByParentId()
+	{
+		String  parentId = getParameter("parentId");
+		try {
+	    	if("mac".equals(SystemUtil.getSystemName())){
+	    		parentId = new String(parentId.getBytes("ISO-8859-1"),"UTF-8");
+	    	}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		String companyId  = String.valueOf((Integer)getSession().getAttribute("companyId"));
+		if(companyId=="null")
+		{
+			getAllProductType(parentId);
+			return;
+			
+		}
+		List<TProduct> list =new ArrayList<TProduct>();
+		//获取 用户选择的 userDetaillist
+		List<TUserProduct> userProductList = orderService.searchUserProductByCompanyId(companyId);
+		String ids = "";
+		String productIds = "";
+		String firstProductIds = "";
+		for (TUserProduct tUserProduct : userProductList) {
+			ids+= tUserProduct.getProductDetailId()+",";
+		}
+		ids = ids.substring(0, ids.length()-1);
+		//获取所有 details
+		List<TProductDetail> details = orderService.searchDetailByIds(ids);
+		
+		for (TProductDetail tProductDetail : details) {
+			productIds+= tProductDetail.getProductId()+",";
+		}
+		productIds = productIds.substring(0, productIds.length()-1);
+		list = orderService.searchProductByProductIdsAndParentId(productIds,parentId);
+		
+		String jsonString = JSON.toJSONString(list);
+		JSONArray jsonArray = JSONArray.parseArray(jsonString);
+		super.writeJson(jsonArray);
+		
 	}
 	
 	public void getProductType() {

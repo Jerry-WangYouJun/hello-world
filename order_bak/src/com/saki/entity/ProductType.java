@@ -6,6 +6,7 @@ import com.saki.model.TProductDetail;
 
 public class ProductType {
 	
+	private String product;
 	private String type;
 	private String unit;
 	private String base;
@@ -43,4 +44,10 @@ public class ProductType {
 		this.children = children;
 	}
 
+	public String getProduct() {
+		return product;
+	}
+	public void setProduct(String product) {
+		this.product = product;
+	}
 }

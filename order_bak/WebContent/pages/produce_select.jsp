@@ -70,6 +70,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			});			
 		}
+		
+		function reset()
+		{
+			$(".sele").attr("class","");
+			//$("#secondMenu dd").hide();			
+			//$(firstMenu).find("ul li:first").trigger("click");
+		}
+		
 		function refresh(){
 			$.ajax({ 
 				url: '${pageContext.request.contextPath}/productAction!loadByCompanyId.action',			
