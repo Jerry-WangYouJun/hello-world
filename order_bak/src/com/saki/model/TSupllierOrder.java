@@ -24,6 +24,9 @@ public class TSupllierOrder implements java.io.Serializable {
 	private String status;
 	private double amount;
 	private String remark;
+	private String invoice ;
+	private Date invoiceDate;
+	private Date invoiceGet;
 
 	// Constructors
 
@@ -32,12 +35,16 @@ public class TSupllierOrder implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public TSupllierOrder(String supplierOrderNo, Date transportDate, String status, double amount, String remark) {
+	public TSupllierOrder(String supplierOrderNo, Date transportDate, String status,
+			double amount, String remark, String invoice ,  Date invoiceDate ,Date invoiceGet) {
 		this.supplierOrderNo = supplierOrderNo;
 		this.transportDate = transportDate;
 		this.status = status;
 		this.amount = amount;
 		this.remark = remark;
+		this.invoice =invoice;
+		this.invoiceDate = invoiceDate;
+		this.invoiceGet =invoiceGet;
 	}
 
 	// Property accessors
@@ -104,5 +111,32 @@ public class TSupllierOrder implements java.io.Serializable {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	@Column(name="invoice")
+	public String getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(String invoice) {
+		this.invoice = invoice;
+	}
+	
+	@Column(name="invoice_date",length = 19 )
+	public Date getInvoiceDate() {
+		return invoiceDate;
+	}
+
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
+	}
+	
+	@Column(name="invoice_get",length = 19 )
+	public Date getInvoiceGet() {
+		return invoiceGet;
+	}
+
+	public void setInvoiceGet(Date invoiceGet) {
+		this.invoiceGet = invoiceGet;
+	}
+	
 
 }

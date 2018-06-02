@@ -30,6 +30,10 @@ public class TOrder implements java.io.Serializable {
 	private String remark;
 	private String companyName;
 	private String locked;
+	private String invoice;
+	private Date invoiceDate;
+	private Date invoiceGet;
+	private String percent;
 
 	// Constructors
 
@@ -39,7 +43,7 @@ public class TOrder implements java.io.Serializable {
 
 	/** full constructor */
 	public TOrder(Integer companyId, String orderNo, Date startDate, Date confirmDate, Date pillDate, Date endDate,
-			String status, double amount, String remark) {
+			String status, double amount, String remark ,String invoice,Date invoiceDate,Date invoiceGet,String percent) {
 		this.companyId = companyId;
 		this.orderNo = orderNo;
 		this.startDate = startDate;
@@ -49,6 +53,10 @@ public class TOrder implements java.io.Serializable {
 		this.status = status;
 		this.amount = amount;
 		this.remark = remark;
+		this.invoice =invoice;
+		this.invoiceDate = invoiceDate;
+		this.invoiceGet =invoiceGet;
+		this.percent = percent;
 	}
 
 	// Property accessors
@@ -173,6 +181,44 @@ public class TOrder implements java.io.Serializable {
 	public void setLocked(String locked) {
 		this.locked = locked;
 	}
+
+	@Column(name ="invoice")
+	public String getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(String invoice) {
+		this.invoice = invoice;
+	}
+
+	@Column(name="invoice_date",length = 19 )
+	public Date getInvoiceDate() {
+		return invoiceDate;
+	}
+
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
+	}
+
+	@Column(name="invoice_get",length = 19 )
+	public Date getInvoiceGet() {
+		return invoiceGet;
+	}
+
+	public void setInvoiceGet(Date invoiceGet) {
+		this.invoiceGet = invoiceGet;
+	}
+
+	
+	@Column(name="percent")
+	public String getPercent() {
+		return percent;
+	}
+
+	public void setPercent(String percent) {
+		this.percent = percent;
+	}
+	
 	
 	
 }

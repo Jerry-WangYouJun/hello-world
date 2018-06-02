@@ -22,6 +22,7 @@ import com.saki.model.TProductDetail;
 import com.saki.model.TSupllierOrderDetail;
 import com.saki.model.TUserProduct;
 import com.saki.service.OrderServiceI;
+import com.saki.utils.SystemUtil;
 
 @Service("orderService")
 public class OrderServiceImpl implements OrderServiceI{
@@ -283,16 +284,7 @@ public class OrderServiceImpl implements OrderServiceI{
 		String hql = "select  SUBSTR(max(t.orderNo) ,LENGTH(max(t.orderNo))-2 ,3) + 1  "
 				+ " from TOrder  t  where t.orderNo like '%" + dayOfOrderNo +  "%'";
 		List<Integer> list =orderDao.find(hql);
-		if(list.size() > 0){
-			String resultStr = list.get(0) + "";
-			if(resultStr.length() ==1  ){
-				resultStr = "00" + resultStr;
-			}else if(resultStr.length() == 2 ){
-				resultStr = "0" + resultStr;
-			}
-			 return  resultStr;
-		}
-		return dayOfOrderNo + "001";
+		return SystemUtil.getOrderResult(list);
 	}
 	
 	@Override

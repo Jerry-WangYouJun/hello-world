@@ -1,5 +1,6 @@
 package com.saki.action;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.opensymphony.xwork2.ModelDriven;
 import com.saki.entity.Message;
 import com.saki.model.TCompany;
-import com.saki.model.TOrderMapping;
+import com.saki.model.TOrder;
 import com.saki.model.TSupllierOrder;
 import com.saki.service.CompanyServiceI;
 import com.saki.service.OrderServiceI;
@@ -257,6 +258,32 @@ public class SupplierOrderAction extends BaseAction implements ModelDriven<TSupl
 			TSupllierOrder order = (TSupllierOrder)supllierOrderService.getByKey(id);
 			order.setStatus(status);
 			orderService.update(order);
+			j.setSuccess(true);
+			j.setMsg("操作成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			j.setSuccess(false);
+			j.setMsg("操作失败");
+		}
+		super.writeJson(j);
+	}
+	
+	public void updateInvoiceStatus() {
+		Message j = new Message();
+		try {
+			String id = getParameter("id");
+			String invoice = getParameter("invoice");
+			TSupllierOrder order = (TSupllierOrder)supllierOrderService.getByKey(id);
+			switch (invoice) {
+			case "1":
+				order.setInvoiceDate(new Date());
+				break;
+			case "2":
+				order.setInvoiceGet(new Date());
+			break;
+			}
+			order.setInvoice(invoice);
+			supllierOrderService.update(order);
 			j.setSuccess(true);
 			j.setMsg("操作成功");
 		} catch (Exception e) {

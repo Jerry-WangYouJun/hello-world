@@ -63,6 +63,7 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	}
 	public void add(){
 		order.setLocked("0");
+		order.setInvoice("0");
 		orderService.add(order);
 	}
 	public void update(){
@@ -338,6 +339,8 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 				
 				break;
 			case "3":
+				String percent = getParameter("percent");
+				order.setPercent(percent);
 				order.setPillDate(new Date());
 				break;
 			case "4":
@@ -346,6 +349,32 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 
 			}
 			order.setStatus(status);
+			orderService.update(order);
+			j.setSuccess(true);
+			j.setMsg("操作成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			j.setSuccess(false);
+			j.setMsg("操作失败");
+		}
+		super.writeJson(j);
+	}
+	
+	public void updateInvoiceStatus() {
+		Message j = new Message();
+		try {
+			String id = getParameter("id");
+			String invoice = getParameter("invoice");
+			TOrder order = (TOrder)orderService.getByKey(id);
+			switch (invoice) {
+			case "1":
+					order.setInvoiceDate(new Date());
+				break;
+			case "2":
+				order.setInvoiceGet(new Date());
+			break;
+			}
+			order.setInvoice(invoice);
 			orderService.update(order);
 			j.setSuccess(true);
 			j.setMsg("操作成功");

@@ -24,6 +24,7 @@ import com.saki.model.TSupllierOrder;
 import com.saki.model.TSupllierOrderDetail;
 import com.saki.service.SupllierOrderServiceI;
 import com.saki.utils.DateUtil;
+import com.saki.utils.SystemUtil;
 
 @Service("supllierOrderService")
 public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
@@ -293,7 +294,8 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	    /**  插入供应商订单*/
 	    supOrder.setAmount(amount);
 	    supOrder.setStatus("1");//0代表新订单状态
-	    supOrder.setSupplierOrderNo("GHT"  + DateUtil.getStringDate());
+	    String dayOfOrderNo = DateUtil.getUserDate("yyyyMMdd");
+	    supOrder.setSupplierOrderNo("GH"  + dayOfOrderNo +  getOrderCode(dayOfOrderNo) );
 	    add(supOrder);
 	    
 	    /**插入供应商详情**/
@@ -319,7 +321,7 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	    
 	}
 	private List<TOrderDetail> getOrderDetailsForSupplierOrder() {
-		String  hql = "from TOrderDetail t  where t.orderId in (select  id from TOrder o where o.locked = '1')";
+		String  hql = "from TOrderDetail t  where t.orderId in (select  id from TOrder o where o.locked = '1' and  o.status='3')";
 		List<TOrderDetail> list = supplierOrderDao.find(hql);
 		return list;
 	}
@@ -356,5 +358,12 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 		supplierOrderDao.updateHql(hql);
 	}
 	
+	@Override
+	public String getOrderCode(String dayOfOrderNo) {
+		String hql = "select  SUBSTR(max(t.supplierOrderNo) ,LENGTH(max(t.supplierOrderNo))-2 ,3) + 1  "
+				+ " from TSupllierOrder  t  where t.supplierOrderNo like '%" + dayOfOrderNo +  "%'";
+		List<Integer> list =supplierOrderDao.find(hql);
+		return   SystemUtil.getOrderResult(list);
+	}
 	
 }

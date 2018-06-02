@@ -20,4 +20,6 @@ public interface BaseServiceI {
 	public Grid search(String row, String text, String sort, String order, String page, String rows);
 	//public ListM<>
 	//public void deleteByKey()
+
+	String getOrderCode(String dayOfOrderNo);
 }

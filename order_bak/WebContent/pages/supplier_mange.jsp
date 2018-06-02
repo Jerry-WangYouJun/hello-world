@@ -100,7 +100,11 @@
 				handler : function() {
 					order_status('4');
 				}
-			} ];
+			} ,'-',{
+				text:'发票已收',
+				iconCls: 'icon-remove',
+				handler: function(){invoice_status('2');}
+			}];
 			if("${roleId}" == '2'){
 				searchUrl = '${pageContext.request.contextPath}/supplier!loadByCompanyId.action' ;
 				toolbar=[ {
@@ -127,6 +131,10 @@
 					handler : function() {
 						order_status('3');
 					}
+				},'-',{
+					text:'发票已开',
+					iconCls: 'icon-remove',
+					handler: function(){invoice_status('1');}
 				} ];
 			}
 			$('#table_order').datagrid({
@@ -146,7 +154,7 @@
 								columns : [ [
 								{field : 'id',hidden : 'true',editor : 'textbox'}, 
 								{field : 'supplierOrderNo',title : '供应商订单',width : 100,align : 'center'}, 
-								{field : 'transportDate',title : '发货时间',width : 150,align : 'center',
+								{field : 'transportDate',title : '发货时间',width : 120,align : 'center',
 									formatter : function(value, row, index) {
 										if (value) {
 											return value.substring(0, 16);
@@ -169,7 +177,29 @@
 										}
 
 									}
-								}, 
+								},{field:'invoice',title:'发票状态',width:100,align:'center',
+									formatter : function(value, row, index) {
+										if (value == '1') {
+											return "发票已开";
+										}  else if(value == "2"){
+											return "发票已收";
+										}else {
+											return "发票未开";
+										}
+				
+									}
+								},{field:'invoice_date',title:'开票/接收时间',width:120,align:'center',
+										formatter : function(value, row, index) {
+											if (row.invoice == '1') {
+												return   row.invoiceDate.substring(0,16);
+											}  else if(row.invoice == "2"){
+												return  row.invoiceGet.substring(0,16);
+											}else {
+												return "";
+											}
+					
+										}
+								},
 								{field : 'remark',title : '备注',width : 100,align : 'center'}
 								] ],
 
@@ -445,6 +475,41 @@
 					});
 			}
 		}
+		
+		function invoice_status(invoice){
+    		var row = $('#table_order').datagrid('getSelected');
+    		if(invoice == '1' && (row.status == '2' || row.status == '1')){
+    			  alert("订单未付款，不能开具发票，请核对！");
+    			  return false ;
+    		}else if(invoice == '2' && row.invoice != '1'){
+    			 alert("发票未开，不能执行该操作！");
+    			 return false ;
+    		}
+        		if(row){
+        			$.messager.confirm(
+        				'提示',
+        				'确定执行该操作?',
+        				function(r) {
+        					if (r) {
+        						$.ajax({ 
+        			    			url: '${pageContext.request.contextPath}/supplier!updateInvoiceStatus.action?invoice=' + invoice,
+        			    			data : {"id":row.id},
+        			    			dataType : 'json',
+        			    			success : function(obj){
+        			    				if(obj.success){
+        			    				 	alert(obj.msg);
+        			    				 	$('#table_order').datagrid('reload');
+        			    				}else{
+        			    					alert(obj.msg);
+        			    					$('#table_order').datagrid('reload');
+        			    				}
+        			    			}
+        			    		});
+        					}
+        				});  		
+        			}
+        	}
+    	
 	 	function order_status(status){
 			var row = $('#table_order').datagrid('getSelected');
 			if(status == '3' && row.status != '2'){
@@ -487,7 +552,7 @@
 					function(r) {
 						if (r) {
 							$.messager.prompt('','请输入要拆分的总数',function(s){
-								if(Math.round(s) === s){
+								if(Math.round(s) == s){
 									$.ajax({
 										url : '${pageContext.request.contextPath}/supplier!splitOrder.action',
 										data : {
