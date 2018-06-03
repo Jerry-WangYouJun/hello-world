@@ -116,7 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				success : function(obj){
 					if (obj.success) {
 						alert(obj.msg);
-						refresh();
+						//refresh();
 					} else {
 						alert(obj.msg);
 					}

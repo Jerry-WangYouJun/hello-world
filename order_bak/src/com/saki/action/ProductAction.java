@@ -51,6 +51,8 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 	public void saveUserProduct(){
 		Message j = new Message();
 		try{
+			//
+			userProductService.delete(Integer.valueOf(getSession().getAttribute("companyId").toString()));
 			userProductService.save(Integer.valueOf(getSession().getAttribute("companyId").toString()), getParameter("productlist"));
 			j.setSuccess(true);
 			j.setMsg("保存成功");

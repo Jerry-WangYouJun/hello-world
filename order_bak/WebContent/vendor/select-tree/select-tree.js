@@ -27,16 +27,32 @@ function initMenu(id, obj){
       if($(this).hasClass("sele"))
     	  {
     	  //判断a标签状态
-    	  debugger;
     	  	var temp = $(this).find("a").hasClass("sele");
     	  	if($(this).find("a").hasClass("sele"))
     	  		{
     	  			$(this).find("a").removeClass("sele");
     	  			$("#secondMenu dt a").removeClass("sele");
+    	  			$("#secondMenu  dd a").removeClass("sele");
+    	  			var alist = $("#secondMenu  dd a");   	  			
+    	  			 for (var i = 0; i < alist.length; i++) {
+    	 				var a = alist[i];
+    	 				$(a).removeClass("sele")
+    	 				var tempId = a.id;
+    	 				$("#c_" + tempId + "").remove();
+    	 			}
     	  		}
     	  	else{ 
     	  			$(this).find("a").addClass("sele");   
     	  			$("#secondMenu dt a").addClass("sele");
+    	  			$("#secondMenu dd a").addClass("sele");
+    	  			$("#secondMenu dd").show();
+    	  			var alist = $("#secondMenu  dd a");
+    	  			for (var i = 0; i < alist.length; i++) {
+    					var a = alist[i];
+    					var tempId = a.id;					
+    					$("#c_" + tempId + "").remove();
+    					resultArea.append("<a href='#' id='c_" +tempId + "'>" +tempId + "</a>");  
+    				}   
     	  		}
     	  }
       else
@@ -81,11 +97,11 @@ function initMenu(id, obj){
       //$(this).find("a").addClass("sele");
    
       
-      var resultItems = resultArea.find("a");
-        $.each(resultItems, function (n, ritem) {
+      //var resultItems = resultArea.find("a");
+       /* $.each(resultItems, function (n, ritem) {
             var rid = $(ritem).attr("id").substr(2, $(ritem).attr("id").length);
             secondMenu.find("a[id='" + rid + "']").addClass("sele");
-        });
+        });*/
     }); 
   
 }
@@ -105,9 +121,9 @@ function initMenu(id, obj){
      	   	return;
      	   }
         else if(temp.length==0)
-     	   {
-          
-     	   $("#dt_"+id).find("a").removeClass("sele");
+     	   {         
+     	   		$("#dt_"+id).find("a").removeClass("sele");
+     	   		
      	   }
       }else{
         $(this).addClass("sele");
@@ -133,8 +149,7 @@ function initMenu(id, obj){
 	//监听 二级科目  显示三级科目
 	function secondTypeSelect(id,obj)
 	{
-		var resultArea = $("#result");
-	
+		var resultArea = $("#result");	
 		 $("#dd_"+id).show(); 	 
 		 if ($(obj).hasClass("sele")){		 	 
 		      $(obj).removeClass("sele");
@@ -147,8 +162,7 @@ function initMenu(id, obj){
 				$("#c_" + tempId + "").remove();
 			}
 		      
-		     // $("#c_" + id + "").remove(); 
-		      
+		     // $("#c_" + id + "").remove(); 		      
 		    }else{		 	   
 		      $(obj).addClass("sele");
 		      $("#dd_"+id).find("a").addClass("sele");
