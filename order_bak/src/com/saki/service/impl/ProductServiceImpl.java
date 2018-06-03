@@ -13,11 +13,13 @@ import com.saki.dao.BaseDaoI;
 import com.saki.entity.Grid;
 import com.saki.entity.Product;
 import com.saki.entity.ProductType;
+import com.saki.entity.TreeModel;
 import com.saki.model.TProduct;
 import com.saki.model.TProductDetail;
 import com.saki.service.ProductDetailServiceI;
 import com.saki.service.ProductServiceI;
 import com.saki.service.UserProductServiceI;
+import com.saki.utils.TreeUntil;
 
 @Service("productService")
 public class ProductServiceImpl implements ProductServiceI{
@@ -34,7 +36,13 @@ public class ProductServiceImpl implements ProductServiceI{
 	}
 	private ProductDetailServiceI productDetailService;
 	
-	
+	public UserProductServiceI getUserProductService() {
+		return userProductService;
+	}
+	@Autowired
+	public void setUserProductService(UserProductServiceI userProductService) {
+		this.userProductService = userProductService;
+	}
 	public ProductDetailServiceI getProductDetailService() {
 		return productDetailService;
 	}
@@ -235,7 +243,7 @@ public class ProductServiceImpl implements ProductServiceI{
 				type.setChildren(children);
 				typeList.add(type);
 			}		
-		
+			
 			product.setChildren(typeList);
 			productList.add(product);			
 		}		
@@ -293,11 +301,37 @@ public class ProductServiceImpl implements ProductServiceI{
 			return productList;
 		}
 	
-	public UserProductServiceI getUserProductService() {
-		return userProductService;
-	}
-	@Autowired
-	public void setUserProductService(UserProductServiceI userProductService) {
-		this.userProductService = userProductService;
+	
+	
+	
+	
+	@Override
+	/**
+	 * zTree 
+	 */
+	public List<TreeModel> listTreeByCompanyId(Integer companyId) {
+		// TODO Auto-generated method stub
+		ArrayList<Integer> detailIds = userProductService.getIdByCompany(companyId);	
+				
+		String hql ="from  TProduct ";
+		//取出所有product
+		List<TProduct> productList = produceDao.find(hql);
+		//取出所有productDetail
+		
+		List<TProductDetail> detailList = productDetailService.searchAllProductDetail();
+		
+		logger.info(" productList.size = "+productList.size() + "detailList.size = "+detailList.size() );
+		TreeUntil tUntil = new TreeUntil();
+		
+		List<TreeModel> productModel = tUntil.convertProductToList(productList);
+		
+		List<TreeModel> detailModel = tUntil.convertProductDetailToList(detailList,detailIds);
+		
+		List<TreeModel> treeList = new ArrayList<TreeModel>();
+		treeList.addAll(productModel);
+		treeList.addAll(detailModel);
+		logger.info("treeLis.size = "+treeList.size());		
+		
+		return treeList;
 	}
 }

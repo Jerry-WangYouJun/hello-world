@@ -1,5 +1,6 @@
 package com.saki.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,15 @@ public class ProductDetailServiceImpl implements ProductDetailServiceI{
 	@Autowired
 	public void setProductDetailDao(BaseDaoI productDetailDao) {
 		this.productDetailDao = productDetailDao;
+	}
+
+
+	
+	@Override
+	public List<TProductDetail> searchAllProductDetail() {
+		// TODO Auto-generated method stub
+		String hql =" from  TProductDetail detail  where detail.productId is not null ";		
+		return productDetailDao.find(hql);
 	}
 
 }

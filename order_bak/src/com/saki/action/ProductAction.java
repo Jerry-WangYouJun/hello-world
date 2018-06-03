@@ -38,6 +38,16 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 	public void loadByCompanyId(){
 		super.writeJson(productService.listByCompany1(Integer.valueOf(getSession().getAttribute("companyId").toString())));
 	}
+	
+	
+	/**
+	 * 产品选择页面 —— ztree 
+	 */
+	public void loadTreeByCompanyId()
+	{
+		super.writeJson(productService.listTreeByCompanyId(Integer.valueOf(getSession().getAttribute("companyId").toString())));
+	}
+	
 	public void saveUserProduct(){
 		Message j = new Message();
 		try{
