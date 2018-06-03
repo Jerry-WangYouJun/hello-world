@@ -18,8 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="description" content="This is my page">
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-    
+	-->    
     
    <jsp:include page="/common.jsp"></jsp:include>
   </head>
@@ -74,7 +73,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					{field:'tax',title:'税号',width:150,align:'center'},
 					{field:'card',title:'银行账号',width:150,align:'center'},
 					{field:'remark',title:'备注',width:100,align:'center'}
-				]],				
+				]],	
+				onDblClickCell: function(index,field,value){
+					company_edit();
+					/* $(this).datagrid('beginEdit', index);
+					var ed = $(this).datagrid('getEditor', {index:index,field:field});
+					//$(ed.target).focus();
+					alert(123); */
+				}
 			});
 		});
 		function company_add(){
