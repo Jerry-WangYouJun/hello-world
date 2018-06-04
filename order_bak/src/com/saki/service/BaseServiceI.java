@@ -21,5 +21,5 @@ public interface BaseServiceI {
 	//public ListM<>
 	//public void deleteByKey()
 
-	String getOrderCode(String dayOfOrderNo);
+	//String getOrderCode(String dayOfOrderNo);
 }

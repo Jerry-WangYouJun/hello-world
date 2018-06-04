@@ -37,5 +37,5 @@ public interface SupllierOrderServiceI  extends BaseServiceI{
 
 	void updateOrderStatus(String id);
 
-
+	String getOrderCode(String dayOfOrderNo);
 }
