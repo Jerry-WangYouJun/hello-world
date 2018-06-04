@@ -26,7 +26,7 @@ public class TProduct implements java.io.Serializable {
 
 	private String parentId;
 	// Constructors
-
+	
 	/** default constructor */
 	public TProduct() {
 	}

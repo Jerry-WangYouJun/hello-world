@@ -43,7 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	
 	<div data-options="region:'center',border:false,showHeader:false" style="padding-bottom: 3px" class="production-menu" id="pro_datalist" fit="true">
  		<div class='menu' id='firstMenu'>
-
+			<!-- <div id='result' style='display:none' ></div> -->
   		</div>
   		<div class="sub-menu easyui-panel" fit="true" id="secondMenu" style="padding-bottom: 20px" >
 
@@ -56,6 +56,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 		function select_save(){
 			var productlist = getSelected();
+			if(productlist ==null || productlist =='' )
+				{
+					alert('请选择一个产品');
+					return;
+				}
 			$.ajax({ 
 				url: '${pageContext.request.contextPath}/productAction!saveUserProduct.action',	
 				data : {'productlist':productlist},		
@@ -63,7 +68,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				success : function(obj){
 					if (obj.success) {
 						alert(obj.msg);
-						refresh();
+						//refresh();
 					} else {
 						alert(obj.msg);
 					}

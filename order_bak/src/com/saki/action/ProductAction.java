@@ -61,6 +61,12 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 		}	
 		super.writeJson(j);
 	}
+	
+	public void getUserSelectProductDetail()
+	{
+		super.writeJson(userProductService.getIdByCompany(Integer.valueOf(getSession().getAttribute("companyId").toString())));
+	}
+	
 	public UserProductServiceI getUserProductService() {
 		return userProductService;
 	}

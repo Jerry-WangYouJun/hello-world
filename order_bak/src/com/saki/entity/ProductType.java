@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import com.saki.model.TProductDetail;
 
 public class ProductType {
+	private String parentId;
 	
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
 	private String product;
 	private String type;
 	private String unit;
