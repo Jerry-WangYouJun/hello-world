@@ -212,6 +212,17 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		super.writeJson(jsonArray);
 		
 	}
+	//判断用户是否已经选择产品
+	public Boolean getUserSelectDetail()
+	{
+		String companyId  = String.valueOf((Integer)getSession().getAttribute("companyId"));
+		List<TUserProduct> userProductList = orderService.searchUserProductByCompanyId(companyId);
+		if(userProductList==null || userProductList.size()==0)
+		{
+			return false;
+		}
+		return true;
+	}
 	
 	public void getProductType() {
 	    String  product = getParameter("product");

@@ -33,6 +33,7 @@ button, input, optgroup, select, textarea {
 	 <script type="text/javascript">
 	 var editIndex = undefined;
 		$(function(){
+			
 			$('#table_order').datagrid({
 				url:'${pageContext.request.contextPath}/orderAction!searchDetail.action',
 				pagination: true,

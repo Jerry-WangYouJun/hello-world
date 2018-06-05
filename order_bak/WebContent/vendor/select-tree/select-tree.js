@@ -13,6 +13,10 @@ function initMenu(id, obj){
   //获取用户选择的产品
   $.post("/order_bak/productAction!getUserSelectProductDetail.action",function(data){
 	  var temp = eval(data);
+	  if(temp==null)
+		  {
+		  	return;
+		  }
 	  for (var i = 0; i < temp.length; i++) {
 		var id = temp[i];
 		resultArea.find("a[id='c_" + id + "']").remove();

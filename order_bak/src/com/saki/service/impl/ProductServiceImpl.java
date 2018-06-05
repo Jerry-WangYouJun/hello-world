@@ -338,4 +338,21 @@ public class ProductServiceImpl implements ProductServiceI{
 		
 		return treeList;
 	}
+	/**
+	 * 查询 父级产品类型 （产品大类）
+	 */
+	@Override
+	public TProduct searchParentProduct(Integer id) {
+		// TODO Auto-generated method stub
+		String hql = "from TProduct t  where t.id =:id";
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("id", id);		
+		TProduct product =null;
+		ArrayList list = (ArrayList)produceDao.find(hql, params);
+		if(list!= null &&list.size()!= 0)
+		{
+			product = (TProduct) list.get(0);
+		}
+		return product;
+	}
 }

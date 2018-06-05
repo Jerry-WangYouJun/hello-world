@@ -192,9 +192,11 @@ public class OrderServiceImpl implements OrderServiceI{
 	
 	private List<Map<String, Object>> searchDetailNullPrice(String id) {
 		List<Map<String , Object>>  mapList = new ArrayList<Map<String , Object>>();
-		String hql = "from TProduct t , TProductDetail d, TOrder o , TOrderDetail od "
+		String hql = "from TProduct t , TProductDetail d, TOrder o , TOrderDetail od ,TProduct product  "
 				+ " where t.id = d.productId  and o.id = od.orderId and od.productDetailId = d.id  "
-				+ " and  o.id = " + id  ;
+				+ " and  o.id = " + id +"and t.parentId = product.id " ;
+		
+		
 		List<Object[]> list = orderDao.find(hql);
 		Map<Integer , Map<String,Object>> detailMap = new HashMap<Integer , Map<String,Object>>();
 		for (int i = 0; i < list.size(); i++) {
@@ -203,14 +205,16 @@ public class OrderServiceImpl implements OrderServiceI{
 			TProduct product = (TProduct) objs[0];
 			TProductDetail detail = (TProductDetail) objs[1];
 			TOrderDetail oDetail = (TOrderDetail) objs[3];
+			TProduct parentProduct = (TProduct)objs[4];
 			Map<String , Object >  map = new HashMap<String,Object>();
 			map.put("id", oDetail.getId());
-			map.put("product", product.getProduct() );
-			map.put("type",  product.getType());
+			map.put("product",parentProduct.getProduct() );
+			//前台没改  所以 这个地方 对应的是type
+			map.put("type",  product.getProduct());
 			map.put("sub_product", detail.getSubProduct());
 			map.put("materail", detail.getMaterial());
 			map.put("acount",  oDetail.getNum());
-			map.put("unit", product.getUnit());
+			map.put("unit", parentProduct.getUnit());
 			if(oDetail.getPrice() != null && oDetail.getPrice() > 0 ) {
 				map.put("price", oDetail.getPrice());
 			}

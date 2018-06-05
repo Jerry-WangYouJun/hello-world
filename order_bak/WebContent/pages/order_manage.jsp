@@ -272,6 +272,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                            valueField:'product' ,   
 		                            textField:'product',  
 		                            onSelect:function(data){  
+		                            	debugger;
 		                                var row = $('#table_add').datagrid('getSelected');  
 		                                var rowIndex = $('#table_add').datagrid('getRowIndex',row);//获取行号  
 		                                 var ed = $("#table_add").datagrid('getEditor', {  
@@ -285,7 +286,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                                target.combobox('clear'); //清除原来的数据  
 		                                var subtarget = $('#table_add').datagrid('getEditor', {'index':rowIndex,'field':'sub_product'}).target;  
 		                                subtarget.combobox('clear');
-		                                var url = '${pageContext.request.contextPath}/orderAction!getProductTypeByParentId.action?parentId='+data.id;  
+		                                var url = '${pageContext.request.contextPath}/orderAction!getProductType.action?product='+data.product;  
 		                                target.combobox('reload', url);//联动下拉列表重载   */
 		                            }  
 		                        }    
@@ -300,9 +301,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                        type : 'combobox',    
 		                        options : {    
 		                           // url:'${pageContext.request.contextPath}/orderAction!getProduct.action',  
-		                            valueField:'product' ,   
-		                            textField:'product',  
+		                            valueField:'type' ,   
+		                            textField:'type',  
 		                            onSelect:function(data){  
+		                            	debugger;
 		                                var row = $('#table_add').datagrid('getSelected');  
 		                                var rowIndex = $('#table_add').datagrid('getRowIndex',row);//获取行号  
 		                                var thisTarget = $('#table_add').datagrid('getEditor', {'index':rowIndex,'field':'type'}).target;  
@@ -328,6 +330,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                            valueField:'subProduct' ,   
 		                            textField:'subProduct',  
 		                            onSelect:function(data){  
+		                            	debugger;
 		                                var row = $('#table_add').datagrid('getSelected');  
 		                                var rowIndex = $('#table_add').datagrid('getRowIndex',row);//获取行号  
 		                                 var ed = $("#table_add").datagrid('getEditor', {  
@@ -393,6 +396,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    		                            valueField:'product' ,   
    		                            textField:'product',  
    		                            onSelect:function(data){  
+   		                            	debugger;
    		                                var row = $('#table_add').datagrid('getSelected');  
    		                                var rowIndex = $('#table_add').datagrid('getRowIndex',row);//获取行号  
    		                                 var ed = $("#table_add").datagrid('getEditor', {  
@@ -689,6 +693,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$('#table_add').datagrid('reload', {
 				 id: $("#id").val()
 			});
+			
 				$("#company_save").click(function(){
   					$.ajax({
 						url : '${pageContext.request.contextPath}/companyAction!update.action',
