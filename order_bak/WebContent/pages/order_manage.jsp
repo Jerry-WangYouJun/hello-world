@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<input type="hidden"  id = "id"  name = "id">
 		    		<div class="form-group col-md-6">
 		            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">订单编号：</label>
-		                <input name="orderNo" id="orderNo" class="form-control" style="display: inline-block;width: 30%">
+		                <input name="orderNo" id="orderNo" class="form-control" style="display: inline-block;width: 30%" disabled="disabled">
 		        </div>
 		        <div class="form-group col-md-6">
 		                	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">下单时间：</label>
@@ -792,8 +792,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			    			    				 	$('#table_order').datagrid('reload');
     			    			    				}else{
     			    			    					alert(obj.msg);
-    			    			    					 $('#order_dlg').dialog('close');	
-    			    			    					$('#table_order').datagrid('reload');
     			    			    				}
     			                    }, "JSON");
     			              }

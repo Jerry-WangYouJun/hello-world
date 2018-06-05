@@ -20,7 +20,7 @@
 <body class="easyui-layout">
 	<div data-options="region:'north',border:false,showHeader:false"
 		style="height: 60px">
-		<h3>订单管理</h3>
+		<h3>供应商订单管理</h3>
 	</div>
 	<div data-options="region:'center',border:false,showHeader:false"
 		style="padding-bottom: 10px">
@@ -64,7 +64,13 @@
 	<script type="text/javascript">
 		$(function() {
 			var  searchUrl = '${pageContext.request.contextPath}/supplier!loadAll.action' ;
-			var  toolbar = [  {
+			var  toolbar = [ {
+				text : '订单详情',
+				iconCls : 'icon-edit',
+				handler : function() {
+					order_edit();
+				}
+			}, {
 				text : '删除',
 				iconCls : 'icon-remove',
 				handler : function() {

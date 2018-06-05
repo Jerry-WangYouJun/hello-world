@@ -241,34 +241,49 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		 String insert = getParameter("inserted");
 		 String update = getParameter("updated");
 		 String delete = getParameter("deleted");
-		 if(StringUtils.isEmpty(orderId)) {
-			 String companyId = getParameter("companyId");
-			 if(StringUtils.isEmpty(companyId)) {
-				   companyId = String.valueOf((Integer)getSession().getAttribute("companyId"));
+		 Message j = new Message();
+		 boolean  insertFlag = checkOrderJson(insert);
+		 boolean  updateFlag = checkOrderJson(update);
+			 if(StringUtils.isEmpty(orderId)) {
+				 if(insertFlag){
+					 String companyId = getParameter("companyId");
+					 if(StringUtils.isEmpty(companyId)) {
+						 companyId = String.valueOf((Integer)getSession().getAttribute("companyId"));
+					 }
+					 order  = new TOrder();
+					 String dayOfOrderNo = DateUtil.getUserDate("yyyyMMdd");
+					 order.setOrderNo("KH"  + dayOfOrderNo +  orderService.getOrderCode(dayOfOrderNo) );
+					 order.setCompanyId(Integer.valueOf(companyId));
+					 order.setStartDate(new Date());
+					 order.setStatus("1");//新订单
+					 orderService.add(order);
+					 insertDetail(insert);
+					 j.setSuccess(true);
+				     j.setMsg("添加成功");
+				 }else{
+					 j.setSuccess(false);
+				     j.setMsg("产品类型或产品的数量为必填，请仔细检查！");
+				 }
+				
+			 }else {
+				 if(!insertFlag || !updateFlag){
+					 j.setSuccess(false);
+				     j.setMsg("产品类型或产品的数量为必填，请仔细检查！");
+				 }else{
+					 order = (TOrder)orderService.getByKey(orderId);
+					 if(StringUtils.isNotEmpty(insert) ) {
+						 insertDetail(insert);
+					 }
+					 if(StringUtils.isNotEmpty(update)) {
+						 updateDetail(update);
+					 }
+					 if(StringUtils.isNotEmpty(delete)) {
+						 deleteDetail(delete);
+					 }
+				 }
 			 }
-			 order  = new TOrder();
-			 String dayOfOrderNo = DateUtil.getUserDate("yyyyMMdd");
-			 order.setOrderNo("KH"  + dayOfOrderNo +  orderService.getOrderCode(dayOfOrderNo) );
-			 order.setCompanyId(Integer.valueOf(companyId));
-			 order.setStartDate(new Date());
-			 order.setStatus("1");//新订单
-			 orderService.add(order);
-			 insertDetail(insert);
-		 }else {
-			 order = (TOrder)orderService.getByKey(orderId);
-			 if(StringUtils.isNotEmpty(insert)) {
-				 insertDetail(insert);
-			 }
-			 if(StringUtils.isNotEmpty(update)) {
-				   updateDetail(update);
-			 }
-			 if(StringUtils.isNotEmpty(delete)) {
-				   deleteDetail(delete);
-			 }
-		 }
-	     Message j = new Message();
-	     j.setSuccess(true);
-	     j.setMsg("添加成功");
+	     
+	     
 	     super.writeJson(j);
 	} 
 	private void deleteDetail(String delete) {
@@ -282,14 +297,13 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	     }
 		
 	}
-	public void insertDetail(String insert) {
+	public void insertDetail(String insert)  {
 		JSONArray jsonArr =  JSON.parseArray(insert);
-	     System.out.println(jsonArr);
 	    // jsonArr.getJSONObject(0);
 	     for(int i = 0 ; i < jsonArr.size() ; i ++) {
 	    	    	   JSONObject obj = jsonArr.getJSONObject(i);
 	    	    	   TOrderDetail detail = new TOrderDetail();
-	    	    	   detail.setNum(StringUtils.isEmpty(obj.getString("acount")) ? 0 : obj.getIntValue("acount"));
+	    	    	   detail.setNum( obj.getIntValue("acount"));
 	    	    	   detail.setOrderId(order.getId());
 	    	    	   detail.setProductDetailId(obj.getInteger("detailId")==0?0:obj.getIntValue("detailId"));
 	    	    	   orderService.add(detail);
@@ -384,5 +398,22 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 			j.setMsg("操作失败");
 		}
 		super.writeJson(j);
+	}
+	
+	public boolean checkOrderJson(String json){
+		if(StringUtils.isEmpty(json)){
+			 return true;
+		}
+		JSONArray jsonArr =  JSON.parseArray(json);
+	     for(int i = 0 ; i < jsonArr.size() ; i ++) {
+	    	   JSONObject obj = jsonArr.getJSONObject(i);
+	    	   if(obj.getInteger("detailId")== null ||obj.getInteger("detailId") ==0){
+	    		   return false;
+	    	   }
+	    	   if( obj.getInteger("acount") == null  ||obj.getInteger("acount") == 0 ){
+	    		     return false;
+	    	   } 
+	     }
+	     return true;
 	}
 }
