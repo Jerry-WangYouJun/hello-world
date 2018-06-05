@@ -157,17 +157,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			}
 		}
 		function company_close(){
-			$.messager.confirm('提示','关闭之后当前所做的修改都不会执行，确认关闭？',
-    				function(r) {
-    					if (r) {
-    						$('#company_form').form('reset');
-    						$('#company_form').form('clear');
-    						$('#company_dlg').dialog('close');	
-    						$('#company_table').datagrid('reload');
-    						$('label.error').remove();
-    						$('.error').removeClass("error");
-    					}
-    		});
+			$('#company_form').form('reset');
+			$('#company_form').form('clear');
+			$('#company_dlg').dialog('close');	
+			$('#company_table').datagrid('reload');
+			$('label.error').remove();
+			$('.error').removeClass("error");
 		}
 		
 		

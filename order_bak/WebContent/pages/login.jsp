@@ -35,19 +35,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In</h3>
+                        <h3 class="panel-title">欢迎登录</h3>
                     </div>
                     <div class="panel-body">
                         <form role="form" id="log_form">
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="userName" name="userName" type="text" autofocus>
+                                    <input class="form-control" placeholder="请输入用户名" name="userName" type="text" autofocus>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Password" name="userPwd" type="password" value="">
+                                    <input class="form-control" placeholder="请输入密码" name="userPwd" type="password" value="">
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
-                                <a class="btn btn-lg btn-success btn-block" onclick="submitForm()">Login</a>
+                                <a class="btn btn-lg btn-success btn-block" onclick="submitForm()">登录</a>
                             </fieldset>
                         </form>
                     </div>
