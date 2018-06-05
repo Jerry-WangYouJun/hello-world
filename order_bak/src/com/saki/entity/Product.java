@@ -4,7 +4,15 @@ import java.util.ArrayList;
 import com.saki.model.TProductDetail;
 
 public class Product {
-
+	private int id;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	private String product;
 	private String unit;
 	public String getUnit() {
