@@ -64,19 +64,7 @@
 	<script type="text/javascript">
 		$(function() {
 			var  searchUrl = '${pageContext.request.contextPath}/supplier!loadAll.action' ;
-			var  toolbar = [ {
-				text : '添加',
-				iconCls : 'icon-add',
-				handler : function() {
-					order_add();
-				}
-			}, '-', {
-				text : '订单详情',
-				iconCls : 'icon-edit',
-				handler : function() {
-					order_edit();
-				}
-			}, '-', {
+			var  toolbar = [  {
 				text : '删除',
 				iconCls : 'icon-remove',
 				handler : function() {
@@ -84,25 +72,25 @@
 				}
 			}, '-', {
 				text : '审核',
-				iconCls : 'icon-remove',
+				iconCls : 'icon-filter',
 				handler : function() {
 					order_check('2');
 				}
 			}, '-', {
 				text : '取消审核',
-				iconCls : 'icon-remove',
+				iconCls : 'icon-undo',
 				handler : function() {
 					order_check('1');
 				}
 			}, '-', {
 				text : '确认收货',
-				iconCls : 'icon-remove',
+				iconCls : 'icon-ok',
 				handler : function() {
 					order_status('4');
 				}
 			} ,'-',{
 				text:'发票已收',
-				iconCls: 'icon-remove',
+				iconCls: 'icon-print',
 				handler: function(){invoice_status('2');}
 			}];
 			if("${roleId}" == '2'){
@@ -127,13 +115,13 @@
 					}
 				}, '-', {
 					text : '确认付款',
-					iconCls : 'icon-remove',
+					iconCls : 'icon-ok',
 					handler : function() {
 						order_status('3');
 					}
 				},'-',{
 					text:'发票已开',
-					iconCls: 'icon-remove',
+					iconCls: 'icon-print',
 					handler: function(){invoice_status('1');}
 				} ];
 			}

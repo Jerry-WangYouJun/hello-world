@@ -48,32 +48,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	$(function(){
     		var toolbar = [
     			{
-					text:'添加订单',
-					iconCls: 'icon-add',
-					handler: function(){order_add();}
-				},'-',{
-					text:'修改',
-					iconCls: 'icon-edit',
-					handler: function(){order_edit();}
-				},'-',{
 					text:'删除',
 					iconCls: 'icon-remove',
 					handler: function(){order_delete();}
 				},'-',{
 					text:'确认付款',
-					iconCls: 'icon-remove',
+					iconCls: 'icon-ok',
 					handler: function(){order_status('3');}
 				},'-',{
    						text:'锁定订单',
-   						iconCls: 'icon-ok',
+   						iconCls: 'icon-lock',
    						handler: function(){updateOrderLocked('1');}
 					},'-',{
 						text:'解锁订单',
-						iconCls: 'icon-ok',
+						iconCls: 'icon-undo',
 						handler: function(){updateOrderLocked('0');}
 					},'-',{
 						text:'发票已开',
-						iconCls: 'icon-remove',
+						iconCls: 'icon-print',
 						handler: function(){invoice_status('1');}
 					}
     		];
@@ -95,11 +87,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     						handler: function(){order_delete();}
     					},'-',{
     						text:'确认收货',
-    						iconCls: 'icon-remove',
+    						iconCls: 'icon-ok',
     						handler: function(){order_status('4');}
     					},'-',{
     						text:'发票已收',
-    						iconCls: 'icon-remove',
+    						iconCls: 'icon-print',
     						handler: function(){invoice_status('2');}
     					}
     	    		];
