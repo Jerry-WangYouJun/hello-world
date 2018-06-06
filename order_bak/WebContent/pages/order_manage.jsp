@@ -289,7 +289,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                                target.combobox('clear'); //清除原来的数据  
 		                                var subtarget = $('#table_add').datagrid('getEditor', {'index':rowIndex,'field':'sub_product'}).target;  
 		                                subtarget.combobox('clear');
-		                                var url = '${pageContext.request.contextPath}/orderAction!getProductType.action?product='+data.product;  
+		                                var url = '${pageContext.request.contextPath}/orderAction!getProductTypeByParentId.action?parentId='+data.id;  
 		                                target.combobox('reload', url);//联动下拉列表重载   */
 		                            }  
 		                        }    
@@ -304,8 +304,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                        type : 'combobox',    
 		                        options : {    
 		                           // url:'${pageContext.request.contextPath}/orderAction!getProduct.action',  
-		                            valueField:'type' ,   
-		                            textField:'type',  
+		                            valueField:'product' ,   
+		                            textField:'product',  
 		                            onSelect:function(data){  
 		                                var row = $('#table_add').datagrid('getSelected');  
 		                                var rowIndex = $('#table_add').datagrid('getRowIndex',row);//获取行号  
