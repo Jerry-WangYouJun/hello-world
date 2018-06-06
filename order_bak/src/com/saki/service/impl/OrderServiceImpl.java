@@ -22,6 +22,7 @@ import com.saki.model.TProductDetail;
 import com.saki.model.TSupllierOrderDetail;
 import com.saki.model.TUserProduct;
 import com.saki.service.OrderServiceI;
+import com.saki.service.ProductServiceI;
 import com.saki.utils.SystemUtil;
 
 @Service("orderService")
@@ -66,6 +67,16 @@ public class OrderServiceImpl implements OrderServiceI{
 	public void deleteByKey(String key) {
 		orderDao.delete(getByKey(key));
 	}
+	
+	
+	public ProductServiceI getProductService() {
+		return productService;
+	}
+	@Autowired
+	public void setProductService(ProductServiceI productService) {
+		this.productService = productService;
+	}
+	private ProductServiceI productService;
 
 	@Override
 	public Grid loadAll(String sort, String order, String page, String rows) {
@@ -160,12 +171,13 @@ public class OrderServiceImpl implements OrderServiceI{
 			TOrderDetail oDetail = (TOrderDetail) objs[3];
 			Map<String , Object >  map = new HashMap<String,Object>();
 			map.put("id", oDetail.getId());
-			map.put("product", product.getProduct() );
-			map.put("type",  product.getType());
+			TProduct parentProduct = productService.searchParentProduct(product.getId());
+			map.put("product", parentProduct.getProduct() );
+			map.put("type",  product.getProduct());
 			map.put("sub_product", detail.getSubProduct());
 			map.put("materail", detail.getMaterial());
 			map.put("acount",  oDetail.getNum());
-			map.put("unit", product.getUnit());
+			map.put("unit", parentProduct.getUnit());
 			if(oDetail.getPrice() != null && oDetail.getPrice() > 0 ) {
 				map.put("price", oDetail.getPrice());
 			}
