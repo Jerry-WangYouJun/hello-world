@@ -123,8 +123,9 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	}
 	@Override
 	public List<Map<String, Object>> searchDetail(String id  , String   companyId) {
-		String hql = "from TProduct t , TProductDetail d, TSupllierOrder o , TSupllierOrderDetail od "
-				+ " where t.id = d.productId  and o.id = od.supllierOrderId and od.productDetailId = d.id  and  o.id = " + id  ;
+		String hql = "from TProduct t , TProductDetail d, TSupllierOrder o , TSupllierOrderDetail od , TProduct parent "
+				+ " where t.id = d.productId  and o.id = od.supllierOrderId and od.productDetailId = d.id"
+				+ " and t.parentId = parent.id  and  o.id = " + id  ;
 		if(StringUtils.isNotEmpty(companyId)){
 			 hql += " and od.conpanyId = " + companyId ;
 		}
@@ -136,14 +137,15 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 			TProduct product = (TProduct) objs[0];
 			TProductDetail detail = (TProductDetail) objs[1];
 			TSupllierOrderDetail oDetail = (TSupllierOrderDetail) objs[3];
+			TProduct parentProduct = (TProduct) objs[4];
 			Map<String , Object >  map = new HashMap<String,Object>();
 			map.put("id", oDetail.getId());
-			map.put("product", product.getProduct() );
-			map.put("type",  product.getType());
+			map.put("product", parentProduct.getProduct() );
+			map.put("type",  product.getProduct());
 			map.put("sub_product", detail.getSubProduct());
 			map.put("materail", detail.getMaterial());
 			map.put("acount", oDetail.getNum());
-			map.put("unit", product.getUnit());
+			map.put("unit", parentProduct.getUnit());
 			map.put("price",  oDetail.getPrice() );
 			map.put("detailId", detail.getId());
 			map.put("productId", product.getId());

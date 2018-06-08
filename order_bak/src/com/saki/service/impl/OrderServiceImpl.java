@@ -156,10 +156,10 @@ public class OrderServiceImpl implements OrderServiceI{
 	}
 	private List<Map<String, Object>> searchDetailPrice(String id) {
 		String hql = "from TProduct t , TProductDetail d, TOrder o , TOrderDetail od , TSupllierOrderDetail sod , "
-				+ " TOrderMapping  m "
+				+ " TOrderMapping  m  , TProduct parent  "
 				+ " where t.id = d.productId  and o.id = od.orderId and od.productDetailId = d.id  "
 				+ " and o.id = m.orderId and sod.supllierOrderId = m.suppilerOrderId and sod.productDetailId = d.id "
-				+ " and  o.id = " + id  ;
+				+ " and t.parentId = parent.id   and  o.id = " + id  ;
 		List<Object[]> list = orderDao.find(hql);
 		List<Map<String , Object>>  mapList = new ArrayList<Map<String , Object>>();
 		Map<Integer , Map<String,Object>> detailMap = new HashMap<Integer , Map<String,Object>>();
@@ -169,9 +169,9 @@ public class OrderServiceImpl implements OrderServiceI{
 			TProduct product = (TProduct) objs[0];
 			TProductDetail detail = (TProductDetail) objs[1];
 			TOrderDetail oDetail = (TOrderDetail) objs[3];
+			TProduct parentProduct = (TProduct) objs[6];
 			Map<String , Object >  map = new HashMap<String,Object>();
 			map.put("id", oDetail.getId());
-			TProduct parentProduct = productService.searchParentProduct(product.getId());
 			map.put("product", parentProduct.getProduct() );
 			map.put("type",  product.getProduct());
 			map.put("sub_product", detail.getSubProduct());
