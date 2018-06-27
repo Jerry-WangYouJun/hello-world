@@ -106,7 +106,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <!-- /.nav-second-level -->
             </li>
 			<li>
-                <a href="#"  class="active" onclick="openTab('<%=path%>/pages/produce_select.jsp')">
+                <a href="#"  class="active" onclick="openTab('<%=path%>/productAction!toProduceSelectTab.action')">
                   <i class="fa fa-dashboard fa-fw"></i>产品类别选择</a>
             </li>
             <li>
@@ -131,7 +131,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <!-- /.nav-second-level -->
             </li>
             <li>
-                <a href="#"  class="active" onclick="openTab('<%=path%>/pages/produce_select.jsp')">
+                <a href="#"  class="active" onclick="openTab('<%=path%>/productAction!toProduceSelectTab.action')">
                   <i class="fa fa-dashboard fa-fw"></i>产品类别选择</a>
             </li>
             <li>
