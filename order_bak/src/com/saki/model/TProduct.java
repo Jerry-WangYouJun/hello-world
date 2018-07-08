@@ -24,7 +24,7 @@ public class TProduct implements java.io.Serializable {
 	private String base;
 	private String remark;
 
-	private String parentId;
+	private Integer parentId;
 	// Constructors
 	
 	/** default constructor */
@@ -42,14 +42,17 @@ public class TProduct implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public TProduct(String product, String type, String unit, String base, String remark) {
+	public TProduct(Integer parentId,String product, String type, String unit, String base, String remark) {
+		this.parentId = parentId;
 		this.product = product;
 		this.type = type;
 		this.unit = unit;
 		this.base = base;
 		this.remark = remark;
 	}
-	public TProduct(Integer id, String product, String type, String unit, String base, String remark) {
+	
+	public TProduct(Integer id,Integer parentId, String product, String type, String unit, String base, String remark) {
+		this.parentId = parentId;
 		this.id = id;
 		this.product = product;
 		this.type = type;
@@ -81,11 +84,11 @@ public class TProduct implements java.io.Serializable {
 	}
 
 	@Column(name="parent_id")
-	public String getParentId() {
+	public Integer getParentId() {
 		return parentId;
 	}
 
-	public void setParentId(String parentId) {
+	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
 	}
 	@Column(name = "product", nullable = false, length = 50)

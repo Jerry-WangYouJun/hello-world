@@ -13,7 +13,11 @@ public interface ProductServiceI extends BaseServiceI{
 	public ArrayList<Product> listByCompany(int companyId);
 	public ArrayList<Product> listByCompany1(int companyId);
 	public List<TreeModel> listTreeByCompanyId(Integer companyId);
-	public TProduct searchParentProduct(Integer id);
+	public TProduct searchProductById(Integer id);
 	public ArrayList<Product> searchProductAndChileProduct();
 	public ArrayList<ProductType> searchSecProductAndChild();
+	public List<TProduct> searchFirstProductType();
+	public List<TProduct> searchChildProductType(int parentId);
+	public void deleteByProduct(TProduct product);
+	public List<TreeModel> listTree();
 }

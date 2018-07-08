@@ -40,7 +40,16 @@ public class TProductDetail implements java.io.Serializable {
 		this.material = material;
 		this.remark = remark;
 	}
-
+	
+	public TProductDetail(Integer id,Integer productId, String subProduct, String format, String material, String remark) {
+		this.id = id;
+		this.productId = productId;
+		this.subProduct = subProduct;
+		this.format = format;
+		this.material = material;
+		this.remark = remark;
+	}
+	
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "increment")
 	@Id
