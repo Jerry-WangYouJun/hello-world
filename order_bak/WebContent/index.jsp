@@ -379,7 +379,6 @@
 					                }
 					                    //通过i的值来改变整体li元素的位置
 					                var ulLeft=-($('li').width())*i;
-					                    console.info(ulLeft);
 					                $('.ulPmd').css('left',ulLeft)
 					            },1000);
 					                    //鼠标滑过li的时候，清除定时器
