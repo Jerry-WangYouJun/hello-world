@@ -397,7 +397,6 @@
 					                        i+=1;
 					                    }
 					                    var ulLeft=-($('li').width())*i;
-					                    console.info(ulLeft);
 					                    $('.ulPmd').css('left',ulLeft)
 					                },1000);
 					            })

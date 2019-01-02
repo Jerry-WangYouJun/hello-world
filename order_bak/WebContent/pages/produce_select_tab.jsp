@@ -45,7 +45,7 @@ var index = layer.load(2, { shade:[0.3,'#fff'] , time:10000 });  //0代表加载
 	 		<span style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">产品类别选择</span>
 	 		<button  id="imageFile" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">上传产品图片</button>
 		</c:if>
-	 	<button onclick="select_save()" id="select_save" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">保存</button> 		
+ 		<button onclick="select_save()" id="select_save" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">保存</button> 		
  		<button onclick="reset()" id="reset" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">重置</button>
  	</div>
     <div class="row" style="min-height:600px;">
@@ -75,7 +75,7 @@ var index = layer.load(2, { shade:[0.3,'#fff'] , time:10000 });  //0代表加载
 			                  <ul class="nav nav-tabs tabs-left ">
 			                  	<s:iterator id="child" value="#product.children" status='in' >		                  		
 					                  	<li class="secTab">
-							              	<a href="#third_<s:property value="#child.id"/>" data-toggle="tab" > 
+							              	<a href="#third_<s:property value="#child.id"/>" data-toggle="tab" onclick="getImg(this)"> 
 							              		<input type="checkbox" id='sec_check_<s:property value="#child.id"/>' data='<s:property value="#child.id"/>' class="aaa" data-parent='<s:property value='#child.parentId'/>'> 							              			
 			                      						<s:property value="#child.product"/>							              											              
 							              		
@@ -119,6 +119,24 @@ var index = layer.load(2, { shade:[0.3,'#fff'] , time:10000 });  //0代表加载
  <%--  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> --%>
   <script>
+  function getImg(obj){
+	   var id = $(obj).children(":checkbox").attr("data") ;
+	   var checked =  $(obj).children(":checkbox").is(":checked") ;
+	  if(checked){
+		   var imgUrl = $("#img_" + id ).attr("src");
+		   if(imgUrl == ''){
+			   var first = $("#first_check_" + $(obj).children(":checkbox").attr("data-parent") ).parent().text().replace(/<p>/g,"");
+			   $.ajax({
+				   url:"${pageContext.request.contextPath}/productAction!getImgInfoByproductId.action?proId=" + id,
+				   type:"get",
+				   dataType:"json",
+				   success:function(data){
+					   $("#img_"+ id).attr('src', "/ring/upload/"+data[0][0]+"/"+data[0][1]+"/"+ data[0][2] +".jpg");
+				   }
+			   })
+		   }
+	  }
+  }
   $("#imageFile").click(function(){
 	    var proId = $("li.active :input")[1].getAttribute("data");
 		layer.open({

@@ -104,6 +104,13 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 	}
 	
 	/**
+	 *  根据productid获取品牌   产品大类 产品类型 获取图片路径
+	 */
+	public void getImgInfoByproductId(){
+		super.writeJson(productService.getImgInfoByproductId(Integer.valueOf(getSession().getAttribute("companyId").toString()) , getParameter("proId")));
+	}
+	
+	/**
 	 * 更新供应商价格
 	 */
 	public void updateMappingPrice(){
