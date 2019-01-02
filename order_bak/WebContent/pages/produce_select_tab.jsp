@@ -46,7 +46,8 @@ var index = layer.load(2, { shade:[0.3,'#fff'] , time:10000 });  //0代表加载
 	 		<button  id="imageFile" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">上传产品图片</button>
 		</c:if>
  		<button onclick="select_save()" id="select_save" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">保存</button> 		
- 		<button onclick="reset()" id="reset" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">重置</button>
+ 		<button onclick="reset()" id="reset" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">全不选</button>
+ 		<button onclick="selectAll()" id="reset" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">全选</button>
  	</div>
     <div class="row" style="min-height:600px;">
         <div>
@@ -163,17 +164,21 @@ var index = layer.load(2, { shade:[0.3,'#fff'] , time:10000 });  //0代表加载
             dataType : "json",
             success: function(data) {
             	layer.close(index);
-            	for (var i = 0; i < data.length; i++) {
-    				var obj = data[i];
-    				$("#third_check_"+obj.productDetailId).prop('checked',true);
-    				if(obj.imgUrl){
-    					$("#img_"+obj.productId).attr('src', "/ring/upload/"+obj.imgUrl);
-    				}
-    				var parentId = $("#third_check_"+obj.productDetailId).attr("data-parent");
-    				 $("#sec_check_"+parentId).prop('checked',true);
-    				 var firstIndex  = $("#sec_check_"+parentId).attr("data-parent");
-    				 $("#first_check_"+firstIndex).prop('checked',true);
-    			} 
+      //      	if(data){
+	            	for (var i = 0; i < data.length; i++) {
+	    				var obj = data[i];
+	    				$("#third_check_"+obj.productDetailId).prop('checked',true);
+	    				if(obj.imgUrl){
+	    					$("#img_"+obj.productId).attr('src', "/ring/upload/"+obj.imgUrl);
+	    				}
+	    				var parentId = $("#third_check_"+obj.productDetailId).attr("data-parent");
+	    				 $("#sec_check_"+parentId).prop('checked',true);
+	    				 var firstIndex  = $("#sec_check_"+parentId).attr("data-parent");
+	    				 $("#first_check_"+firstIndex).prop('checked',true);
+	    			} 
+  //          	}else{
+  //          		$('input[type="checkbox"]').prop('checked',true);
+  //          	}
 		      }
 		});
 
@@ -293,7 +298,9 @@ var index = layer.load(2, { shade:[0.3,'#fff'] , time:10000 });  //0代表加载
     	$('input[type="checkbox"]').prop('checked',false);
     }
     
-   
+   function selectAll(){
+	   $('input[type="checkbox"]').prop('checked',true);
+   }
     //保存
     function select_save(){
 		var productlist="";	
