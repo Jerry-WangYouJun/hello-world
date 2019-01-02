@@ -290,7 +290,10 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 		this.getRequest().setAttribute("secProduct", productService.searchSecProductAndChild());
 		return "toProduceSelectTab";
 	}
-	
+	public void toProduceSelectThirdTab()
+	{
+		super.writeJson(productService.searchSecProductAndChild());
+	}
 	
 	public void searchProduct()
 	{
