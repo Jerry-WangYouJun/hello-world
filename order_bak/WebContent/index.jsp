@@ -326,6 +326,9 @@
 								</c:if>
 							</ul>
 					</li>
+					<li class="last active-menu"><a href="#" onclick="contactUs()"> <i
+								class="icon-bar-chart"></i> <span class="title">联系我们</span>
+						</a></li>
 			</ul>
 			<!-- END SIDEBAR MENU -->
 		</div>
@@ -366,6 +369,9 @@
 							</div>
 						</div>
 						<script language="javascript" type="text/javascript">
+						function contactUs(){
+							 $("#contact").show();
+						}
 					        $(function () {
 					            var i=0;
 					            var timer;
@@ -408,9 +414,6 @@
 						        <li> <h3><span id ="confirm" style="color:red;"></span></h3></li>
 						    </ul>
 						</div>
-							<h3 class="page-title">
-								<span style="color:red;font-family:微软雅黑;">&nbsp;&nbsp;如有疑问，请拨打热线电话18661852354</span>
-							</h3>
 						</c:if>
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 						<ul class="breadcrumb" style="padding:15px 15px">
@@ -430,8 +433,8 @@
 					</div>
 				</div>
 				<!-- END PAGE HEADER-->
-
-								<img alt="" src="img/index.jpeg">
+					
+								<img alt="" src="img/index.jpeg" id = "contact">
 				<!-- BEGIN 主面板 STATS -->
 				<div id="dashboard">
 	 					<div  id ="home" class="tab-content" style="margin-left: 20px">
@@ -468,6 +471,7 @@
             //tabName:当前tab的名称
             //tabTitle:当前tab的标题
             //tabUrl:当前tab所指向的URL地址
+            $("#contact").hide();
                 var content = '';
                     content = '<iframe id="myframe" src="' + tabUrl + '" width="100%"  height="780px"  frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe>';
                    $("#panelName").text(panelName);
