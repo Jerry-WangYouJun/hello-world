@@ -521,8 +521,8 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		String base = getParameter("trans");
 		Message j = new Message();
 		try {
-			orderService.updateBase(Integer.valueOf(base));
-			getSession().setAttribute("base", Integer.valueOf(base));
+			orderService.updateTrans(Integer.valueOf(base));
+			getSession().setAttribute("trans", Integer.valueOf(base));
 			j.setMsg("操作成功");
 			j.setSuccess(true);
 		} catch (Exception e) {

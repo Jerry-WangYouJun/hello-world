@@ -8,7 +8,7 @@
 <title>注册</title>
 
  <jsp:include page="/common.jsp"></jsp:include>
-<link rel="shortcut icon" href="media/image/favicon.ico" />
+<link rel="shortcut icon" href="img/logo.jpg" />
 <style type="text/css">
 body {
 	background: #191c2c !important;

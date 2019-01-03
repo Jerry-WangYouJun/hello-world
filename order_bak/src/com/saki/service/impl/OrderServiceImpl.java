@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.saki.dao.BaseDaoI;
 import com.saki.entity.Grid;
-import com.saki.model.TAddress;
 import com.saki.model.TCompany;
 import com.saki.model.TOrder;
 import com.saki.model.TOrderDetail;
@@ -385,6 +384,11 @@ public class OrderServiceImpl implements OrderServiceI{
 		String hql ="update t_base  set base_money  =  " + base;
 		orderDao.executeUpdate(hql);
 	}
+	@Override
+	public void updateTrans(Integer trans) {
+		String hql ="update  t_carriage   set tran_money  =  " + trans;
+		orderDao.executeUpdate(hql);
+	}
 	
 	@Override
 	public List<Map<String, Object>> searchBrandByProductDetailId(
@@ -452,6 +456,7 @@ public class OrderServiceImpl implements OrderServiceI{
 		
 		return null;
 	}
+	
 	
 	
 }
