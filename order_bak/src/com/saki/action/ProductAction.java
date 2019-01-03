@@ -123,9 +123,9 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 			Double price = Double.valueOf(getParameter("price")) ;
 			userProductService.updatePrice( Integer.valueOf(getSession().getAttribute("companyId").toString() )
 					, Integer.valueOf(getParameter("detailId")) 
-					, price , roleId);
+					, SystemUtil.round(price, 2) , roleId);
 			Integer mapid = Integer.valueOf(getParameter("mapid"));
-			userProductService.updateMarkupPriceWhenPriceUpdate(mapid, price);
+			userProductService.updateMarkupPriceWhenPriceUpdate(mapid, SystemUtil.round(price, 2));
 			j.setSuccess(true);
 			j.setMsg("保存成功");
 		}catch(Exception e){
@@ -141,7 +141,7 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 		Message j = new Message();
 		try{
 			userProductService.updateMarkupPrice(  Integer.valueOf(getParameter("mapid")) 
-					, getParameter("column"), Double.valueOf(getParameter("markup")));
+					, getParameter("column"), SystemUtil.round(Double.valueOf(getParameter("markup")), 2));
 			j.setSuccess(true);
 			j.setMsg("保存成功");
 		}catch(Exception e){
@@ -162,7 +162,7 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 			for (Object object : jsonArray) {
 				 JSONObject  json = (JSONObject) object;
 					Integer mapid = json.getIntValue("mapid");
-					userProductService.updateMarkupPrice(mapid, "price" ,  price);
+					userProductService.updateMarkupPrice(mapid, "price" ,  SystemUtil.round(price, 2));
 			}
 			j.setSuccess(true);
 			j.setMsg("保存成功");
@@ -183,7 +183,7 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 			for (Object object : jsonArray) {
 				 JSONObject  json = (JSONObject) object;
 				 userProductService.updateMarkupPrice(  json.getIntValue("mapid")
-							, "markup", Double.valueOf(getParameter("markup")));
+							, "markup", SystemUtil.round(Double.valueOf(getParameter("markup")), 2));
 			}
 			j.setSuccess(true);
 			j.setMsg("保存成功");
@@ -205,8 +205,8 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 				 JSONObject  json = (JSONObject) object;
 				 userProductService.updateMarkupPrice(  json.getIntValue("mapid")
 							, "price", 
-							SystemUtil.add(json.getDoubleValue("price"), Double.valueOf(getParameter("markup")))
-							);
+							SystemUtil.round(SystemUtil.add(json.getDoubleValue("price"), Double.valueOf(getParameter("markup"))), 2))
+							;
 			}
 			j.setSuccess(true);
 			j.setMsg("保存成功");
@@ -227,7 +227,7 @@ public class ProductAction  extends BaseAction implements ModelDriven<TProduct>{
 			for (Object object : jsonArray) {
 				 JSONObject  json = (JSONObject) object;
 				 userProductService.updateMarkupPriceByPercent(  json.getIntValue("mapid")
-							, Double.valueOf(getParameter("markup")));
+							, SystemUtil.round(Double.valueOf(getParameter("markup")),2));
 			}
 			j.setSuccess(true);
 			j.setMsg("保存成功");

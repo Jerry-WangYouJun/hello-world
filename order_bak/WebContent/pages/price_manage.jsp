@@ -214,8 +214,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				reg=/^[-\+]?\d+(\.\d+)?$/;
 				var val  = $("input.datagrid-editable-input").val();
 				if(field == 'price'){
-					if(val  == '' || val  == 0){
-						 alert("不能为空或0 ,请重新填写");
+					if(val  == '' ){
+						 alert("不能为空,请重新填写");
 						 return false;
 					}
 					if(!reg.test(val)){
@@ -225,6 +225,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return false ;
 					}
 					updatePrice(val, target.productDetailId , target.mapid);
+					/* var e = $('#user_table').datagrid('getEditor', {'index':rowIndex,'field':field}).target;  
+                    	$(e).textbox('setValue',  Math.round(val * 100) / 100); */
+					$('#user_table').datagrid('load');
 				}else{
 					if(val  == '' ){
 						 alert("不能为空,请重新填写");
@@ -237,13 +240,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						return false ;
 					}
 					updatePriceMarkup(val ,  target.mapid , field);
+					$('#user_table').datagrid('load');
 				}
-				$("input.datagrid-editable-input").val(Number(val));
-				$("#user_table").datagrid('endEdit',rowIndex);
 			});
 		}
     	
 		function updatePrice(price , detailId , mapid){
+			price = Math.round(price * 100) / 100;
 				$.ajax({ 
 		    			url: '${pageContext.request.contextPath}/productAction!updateMappingPrice.action',
 		    			data : {"price":price ,"detailId":detailId , "mapid" : mapid },
@@ -261,6 +264,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		
 		function updatePriceMarkup(markup , mapid , column){
+			markup = Math.round(markup * 100) / 100;
 			$.ajax({ 
     			url: '${pageContext.request.contextPath}/productAction!updateMarkupPrice.action',
     			data : {"markup":markup ,"mapid":mapid , "column": column},
