@@ -1,6 +1,6 @@
 package com.saki.entity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.saki.model.TProductDetail;
 
@@ -23,9 +23,10 @@ public class ProductType {
 	private String product;
 	private String type;
 	private String unit;
-	private String base;
+	private Integer base;
 	private String remark;
-	private ArrayList<TProductDetail> children;
+	private String imgUrl;
+	private List<TProductDetail> children;
 	
 	public String getType() {
 		return type;
@@ -39,10 +40,10 @@ public class ProductType {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	public String getBase() {
+	public Integer getBase() {
 		return base;
 	}
-	public void setBase(String base) {
+	public void setBase(Integer base) {
 		this.base = base;
 	}
 	public String getRemark() {
@@ -51,10 +52,10 @@ public class ProductType {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-	public ArrayList<TProductDetail> getChildren() {
+	public List<TProductDetail> getChildren() {
 		return children;
 	}
-	public void setChildren(ArrayList<TProductDetail> children) {
+	public void setChildren(List<TProductDetail> children) {
 		this.children = children;
 	}
 
@@ -64,4 +65,11 @@ public class ProductType {
 	public void setProduct(String product) {
 		this.product = product;
 	}
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+	
 }

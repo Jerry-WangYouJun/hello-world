@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.saki.dao.BaseDaoI;
 import com.saki.entity.Grid;
+import com.saki.model.TColor;
 import com.saki.model.TCompany;
 import com.saki.model.TOrder;
 import com.saki.model.TUser;
@@ -71,20 +72,41 @@ public class CompanyServiceImpl implements CompanyServiceI{
 		if(sort!=null && order!=null){
 			hql = "from TCompany t order by " + sort + " " + order;
 		}
-		String countHql = "select count(t.id) from TCompany t  where 1= 1 ";
 		Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
 		while(it.hasNext()){
 			Map.Entry<String, Object> entry = it.next() ;
 			hql +=  " and " +  entry.getKey() + " like '" + entry.getValue()  +"'";
-			countHql += " and " +  entry.getKey() + " like '" + entry.getValue() +"'" ;
 		}
-		grid.setTotal(companyDao.count(countHql));
+		grid.setTotal(companyDao.count(hql));
 		if(page!=null && rows !=null){
 			List<TCompany> lp = companyDao.find(hql,  Integer.valueOf(page),  Integer.valueOf(rows));
 			grid.setRows(copyToEntity(lp));
 		}else{
 			List<TCompany> l = companyDao.find(hql  );
 			grid.setRows(copyToEntity(l));
+      }	
+		return grid;
+	}
+	
+	@Override
+	public Grid loadColor(String sort, String order, String page, String rows , Map<String,Object> params) {
+		Grid grid = new Grid();
+		String hql = "from TColor t where 1=1 ";
+		if(sort!=null && order!=null){
+			hql = "from TColor t order by " + sort + " " + order;
+		}
+		Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+		while(it.hasNext()){
+			Map.Entry<String, Object> entry = it.next() ;
+			hql +=  " and " +  entry.getKey() + " like '" + entry.getValue()  +"'";
+		}
+		grid.setTotal(companyDao.count(hql));
+		if(page!=null && rows !=null){
+			List<TColor> lp = companyDao.find(hql,  Integer.valueOf(page),  Integer.valueOf(rows));
+			grid.setRows(lp);
+		}else{
+			List<TColor> l = companyDao.find(hql  );
+			grid.setRows(l);
       }	
 		return grid;
 	}
@@ -132,6 +154,19 @@ public class CompanyServiceImpl implements CompanyServiceI{
 		}
 		return lc;		
 	}
+	
+	@Override
+	public void updateColorDelete(String id) {
+		String sql = " update t_company set colorImg =  '' where id=" + id  ;
+		companyDao.executeUpdate(sql);
+	}
+	
+	@Override
+	public Grid search(Map map, String sort, String order, String page, String rows) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public UserServiceI getUserService() {
 		return userService;
 	}

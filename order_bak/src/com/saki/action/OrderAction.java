@@ -1,13 +1,16 @@
 package com.saki.action;
 
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.opensymphony.xwork2.ModelDriven;
+import com.saki.entity.Grid;
 import com.saki.entity.Message;
 import com.saki.model.TOrder;
 import com.saki.model.TOrderDetail;
@@ -24,6 +28,7 @@ import com.saki.model.TProductDetail;
 import com.saki.model.TUserProduct;
 import com.saki.service.OrderServiceI;
 import com.saki.utils.DateUtil;
+import com.saki.utils.ExcelUtil;
 import com.saki.utils.SystemUtil;
 
 @Namespace("/")
@@ -34,7 +39,6 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	private TOrder order;
 	@Override
 	public TOrder getModel() {
-		// TODO Auto-generated method stub
 		return order;
 	}
 	private OrderServiceI orderService;
@@ -45,27 +49,60 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	public void setOrderService(OrderServiceI orderService) {
 		this.orderService = orderService;
 	}
+	
+	
+	public void exportExcel() {
+		Map<String ,Object> params  = new HashMap<>();
+		getParams(params);
+		Grid grid = orderService.search(params,"companyId", "desc", page, rows ,null);
+		List<TOrder> list = grid.getRows();
+		Map<TOrder ,List<Map<String,Object>> > resultMap = new HashMap<>();
+		if(list!= null && list.size() > 0 ) {
+			for(TOrder order : list) {
+				List<Map<String,Object>>  detailList = orderService.searchDetail(order.getId()+"");
+				resultMap.put(order, detailList);
+			}
+			// excel文件名
+			String fileName = "订单信息表_" + DateUtil.getStringDateShort() + ".xls";
+			try {
+				// 创建HSSFWorkbook
+				HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(resultMap);
+				// 响应到客户端
+				this.setResponseHeader(getResponse(), fileName);
+				OutputStream os = getResponse().getOutputStream();
+				wb.write(os);
+				os.flush();
+				os.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public void loadAll(){
 		String page = getParameter("page");
 		String rows = getParameter("rows");
-		String sort = getParameter("sort");
-		String order = getParameter("order");
-		super.writeJson(orderService.loadAll( "startDate", "desc", page, rows));
+		Map<String ,Object> params  = new HashMap<>();
+		getParams(params);
+		super.writeJson(orderService.search(params, "startDate", "desc", page, rows ,null));
 	}
 	
 	public void loadByCompanyId() {
 		String page = getParameter("page");
 		String rows = getParameter("rows");
-		String sort = getParameter("sort");
-		String order = getParameter("order");
-		String companyId  = String.valueOf((Integer)getSession().getAttribute("companyId"));
-		super.writeJson(orderService.search("companyId" , companyId , "startDate", "desc", page, rows));
+		Map<String ,Object> params  = new HashMap<>();
+		getParams(params);
+		super.writeJson(orderService.search(params, "startDate", "desc", page, rows ,null));
 	}
-	public void add(){
-		order.setLocked("0");
-		order.setInvoice("0");
-		orderService.add(order);
+	
+	public void loadUrgentOrder(){
+		String page = getParameter("page");
+		String rows = getParameter("rows");
+		Map<String ,Object> params  = new HashMap<>();
+		getParams(params);
+		super.writeJson(orderService.search(params , "startDate", "desc", page, rows , "1"));
 	}
+
 	public void update(){
 		orderService.update(order);
 	}
@@ -73,34 +110,8 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		orderService.deleteByKey(String.valueOf(order.getId()));
 	}
 	
-	public void updateOrderLocked(){
-		String lockFlag = getParameter("locked");
-		String id =getParameter("id");
-		Message j = new Message();
-		try {
-			orderService.updateOrderLocked(lockFlag , id );
-			j.setSuccess(true);
-			j.setMsg("操作成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			j.setSuccess(false);
-			j.setMsg("操作失败");
-		}
-		super.writeJson(j);
-	}
-	public void search(){
-		String name = getParameter("name");
-		String value = getParameter("value");
-		String page = getParameter("page");
-		String rows = getParameter("rows");
-		String sort = getParameter("sort");
-		String order = getParameter("order");
-		super.writeJson(orderService.search(name, value,sort, order, page, rows));
-	}
-	
 	public void searchDetail() {
 		String id = getParameter("id");
-		String orderNo = getParameter("orderNo");
 		if(!StringUtils.isEmpty(id)) {
 			List<Map<String,Object>>  list = orderService.searchDetail(id);
 			String jsonString = JSON.toJSONString(list);
@@ -110,12 +121,7 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		
 	}
 	
-	/*public void getProduct() {
-		List<TProduct>  list = orderService.searchProduct();
-		String jsonString = JSON.toJSONString(list);
-		JSONArray jsonArray = JSONArray.parseArray(jsonString);
-		super.writeJson(jsonArray);
-	}*/
+
 	public void getAllProduct(){
 		List<TProduct> list = null;
 		list = orderService.searchFirstProduct();
@@ -133,6 +139,14 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		JSONArray jsonArray = JSONArray.parseArray(jsonString);
 		super.writeJson(jsonArray);
 		
+	}
+	
+	public void getProductBrand(){
+		String detailId  = getParameter("detailId");
+		List<Map<String, Object>> mapList =  orderService.searchBrandByProductDetailId(detailId);
+		String jsonString = JSON.toJSONString(mapList);
+		JSONArray jsonArray = JSONArray.parseArray(jsonString);
+		super.writeJson(jsonArray);
 	}
 	
 	public void getProduct() {
@@ -182,7 +196,7 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 			e.printStackTrace();
 		}
 		String companyId  = String.valueOf((Integer)getSession().getAttribute("companyId"));
-		if(companyId=="null")
+		if(companyId=="null")//管理员用户
 		{
 			getAllProductType(parentId);
 			return;
@@ -193,7 +207,7 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		List<TUserProduct> userProductList = orderService.searchUserProductByCompanyId(companyId);
 		String ids = "";
 		String productIds = "";
-		String firstProductIds = "";
+		//遍历企业选择的所有产品id
 		for (TUserProduct tUserProduct : userProductList) {
 			ids+= tUserProduct.getProductDetailId()+",";
 		}
@@ -240,35 +254,64 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	}
 	
 	public void getProductDetail() {
+		String companyId  = String.valueOf((Integer)getSession().getAttribute("companyId"));
 		String productId = getParameter("productId");
-		List<TProductDetail> list = orderService.searchDetailByProductId(productId);
+		List<TProductDetail> list = orderService.searchDetailByProductId(productId,companyId);
 		String jsonString = JSON.toJSONString(list);
 		JSONArray jsonArray = JSONArray.parseArray(jsonString);
 		super.writeJson(jsonArray);
 	}
 	
 	public void getChanges( ) {
+		  
 		 String orderId = getParameter("id");
+		 String confirmId = getParameter("confirmId");
+		 String addressId = getParameter("addressId");
 		 String insert = getParameter("inserted");
 		 String update = getParameter("updated");
 		 String delete = getParameter("deleted");
+		 String urgent = getParameter("urgent");
 		 Message j = new Message();
 		 boolean  insertFlag = checkOrderJson(insert);
 		 boolean  updateFlag = checkOrderJson(update);
+		 //先判断是否有相同采购日的订单
+		 String companyId = getParameter("companyId");
+		 if(StringUtils.isEmpty(companyId)) {
+			 companyId = String.valueOf((Integer)getSession().getAttribute("companyId"));
+		 }
+		 Map<String,Object > params  = new HashMap<>();
+		 params.put("companyId", companyId);
+		 params.put("confirmId", confirmId );
+		 String checkOrderDate = DateUtil.getUserDate("yyyyMM");
+		 params.put("orderNo", "KH" + checkOrderDate + "%");
+		 Grid grid  = orderService.search(params, "startDate", "desc", page, rows ,urgent);
 			 if(StringUtils.isEmpty(orderId)) {
+//				 if(grid.getTotal() > 0 ) {
+//					 j.setSuccess(false);
+//					 j.setMsg("该采购日已经存在订单，请在原订单上进行修改或选择其他采购日");
+//					 super.writeJson(j);
+//					 return ;
+//				 }
 				 if(insertFlag){
-					 String companyId = getParameter("companyId");
-					 if(StringUtils.isEmpty(companyId)) {
-						 companyId = String.valueOf((Integer)getSession().getAttribute("companyId"));
-					 }
 					 order  = new TOrder();
 					 String dayOfOrderNo = DateUtil.getUserDate("yyyyMMdd");
 					 order.setOrderNo("KH"  + dayOfOrderNo +  orderService.getOrderCode(dayOfOrderNo) );
 					 order.setCompanyId(Integer.valueOf(companyId));
 					 order.setStartDate(new Date());
 					 order.setStatus("1");//新订单
+					 if(StringUtils.isNotEmpty(urgent)){
+						 order.setUrgent(urgent);
+					 }
+					 if(StringUtils.isNotBlank(confirmId)) {
+						 order.setConfirmId(Integer.valueOf(confirmId));
+					 }
+					 Integer trans =(Integer) getSession().getAttribute("trans");
+					 order.setAmount(order.getAmount() + trans);
 					 orderService.add(order);
-					 insertDetail(insert);
+					 if(StringUtils.isNotEmpty(insert) ) {
+						 insertDetail(insert);
+					 }
+					 
 					 j.setSuccess(true);
 				     j.setMsg("添加成功");
 				 }else{
@@ -277,6 +320,22 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 				 }
 				
 			 }else {
+				 //如果存在多条，数据异常
+//				 if(grid.getTotal() > 1 ) {
+//					 j.setSuccess(false);
+//					 j.setMsg("该采购日已经存在多条订单，请联系管理员查看订单是否正常");
+//					 super.writeJson(j);
+//					 return ;
+//				 }else if(grid.getTotal() ==  1) {
+//					 List list = grid.getRows();
+//					 TOrder t = (TOrder)list.get(0);
+//					 if(t.getId()  !=  Integer.valueOf(orderId)) {
+//						 j.setSuccess(false);
+//						 j.setMsg("该采购日已经存在订单，请在原订单上进行修改或选择其他采购日");
+//						 super.writeJson(j);
+//						 return ;  
+//					 }
+//				 }
 				 if(!insertFlag || !updateFlag){
 					 j.setSuccess(false);
 				     j.setMsg("产品类型或产品的数量为必填，请仔细检查！");
@@ -291,10 +350,17 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 					 if(StringUtils.isNotEmpty(delete)) {
 						 deleteDetail(delete);
 					 }
+					 if(StringUtils.isNotBlank(confirmId)) {
+						 order.setConfirmId(Integer.valueOf(confirmId));
+					 }
 				 }
+				 j.setSuccess(true);
+			     j.setMsg("修改成功");
 			 }
-	     
-	     
+			 if(StringUtils.isNotBlank(addressId)){
+				 order.setAddressId(Integer.valueOf(addressId));
+			 }
+			 orderService.update(order);
 	     super.writeJson(j);
 	} 
 	private void deleteDetail(String delete) {
@@ -304,44 +370,71 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 	    	    	   JSONObject obj = jsonArr.getJSONObject(i);
 	    	    	   TOrderDetail detail = new TOrderDetail();
 	    	    	   detail = (TOrderDetail)orderService.getByDetailId(obj.getString("id"));
+	    	    	   if(!StringUtils.isEmpty(obj.getString("amount"))){
+	    	    		   detail.setAmount(obj.getDouble("amount"));
+	    	    	   }
+	    	    	   order.setAmount(SystemUtil.sub(order.getAmount(), detail.getAmount()));
 	    	    	   orderService.delete(detail);
 	     }
-		
 	}
+	
 	public void insertDetail(String insert)  {
 		JSONArray jsonArr =  JSON.parseArray(insert);
 	    // jsonArr.getJSONObject(0);
+		Double sum = order.getAmount();
 	     for(int i = 0 ; i < jsonArr.size() ; i ++) {
 	    	    	   JSONObject obj = jsonArr.getJSONObject(i);
 	    	    	   TOrderDetail detail = new TOrderDetail();
 	    	    	   detail.setNum( obj.getIntValue("acount"));
 	    	    	   detail.setOrderId(order.getId());
 	    	    	   detail.setProductDetailId(obj.getInteger("detailId")==0?0:obj.getIntValue("detailId"));
+	    	    	   detail.setBrand(obj.getString("supplierCompanyId"));
+	    	    	   detail.setDefaultFlag(obj.getString("defaultFlag"));
+	    	    	   if(!StringUtils.isEmpty(obj.getString("price"))){
+	    	    		   detail.setPrice(obj.getDouble("price"));
+	    	    	   }
+	    	    	   if(!StringUtils.isEmpty(obj.getString("amount"))){
+	    	    		   detail.setAmount(obj.getDouble("amount"));
+	    	    	   }
+	    	    	   sum = SystemUtil.add(sum , detail.getAmount());
+	    	    	   detail.setRemark(obj.getString("remark"));
 	    	    	   orderService.add(detail);
 	     }
+	     order.setAmount(sum);
 	}
 	
 	public void updateDetail(String update) {
 		JSONArray jsonArr =  JSON.parseArray(update);
+		Double sum = order.getAmount();
 	     //jsonArr.getJSONObject(0);
 	     for(int i = 0 ; i < jsonArr.size() ; i ++) {
 	    	    	   JSONObject obj = jsonArr.getJSONObject(i);
 	    	    	   TOrderDetail detail = new TOrderDetail();
 	    	    	   detail = (TOrderDetail)orderService.getByDetailId(obj.getString("id"));
 	    	    	   if(detail != null) {
+	    	    		   sum = SystemUtil.sub(sum , detail.getAmount());
 	    	    		   detail.setNum(StringUtils.isEmpty(obj.getString("acount")) ? 0 : obj.getIntValue("acount"));
 	    	    		   detail.setProductDetailId(obj.getInteger("detailId")==0?0:obj.getIntValue("detailId"));
+	    	    		   detail.setDefaultFlag(obj.getString("defaultFlag"));
 	    	    		   if(!StringUtils.isEmpty(obj.getString("price"))){
 	    	    			       detail.setPrice(obj.getDouble("price"));
 	    	    		   }
+	    	    		   if(!StringUtils.isEmpty(obj.getString("amount"))){
+		    	    		   detail.setAmount(obj.getDouble("amount"));
+		    	    	   }
+	    	    		   sum = SystemUtil.add(sum , detail.getAmount());
+	    	    		   detail.setBrand(obj.getString("supplierCompanyId"));
+	    	    		   detail.setRemark(obj.getString("remark"));
 	    	    		   orderService.update(detail);
 	    	    	   }
 	     }
+	     order.setAmount(sum);
 	}
 	public void deleteOrder(){
 		Message j = new Message();
 		try {
 			String id = getParameter("id");
+			orderService.deleteOrderDetailByOrderId(id);
 			orderService.deleteByKey(id);
 			j.setSuccess(true);
 			j.setMsg("删除成功");
@@ -360,9 +453,6 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 			String status = getParameter("status");
 			TOrder order = (TOrder)orderService.getByKey(id);
 			switch (status) {
-			case "2":
-				
-				break;
 			case "3":
 				String percent = getParameter("percent");
 				order.setPercent(percent);
@@ -389,6 +479,7 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 		Message j = new Message();
 		try {
 			String id = getParameter("id");
+			//发票状态
 			String invoice = getParameter("invoice");
 			TOrder order = (TOrder)orderService.getByKey(id);
 			switch (invoice) {
@@ -407,6 +498,36 @@ public class OrderAction extends BaseAction implements ModelDriven<TOrder>{
 			e.printStackTrace();
 			j.setSuccess(false);
 			j.setMsg("操作失败");
+		}
+		super.writeJson(j);
+	}
+	
+	public void updateBase(){
+		String base = getParameter("base");
+		Message j = new Message();
+		try {
+			orderService.updateBase(Integer.valueOf(base));
+			getSession().setAttribute("base", Integer.valueOf(base));
+			j.setMsg("操作成功");
+			j.setSuccess(true);
+		} catch (Exception e) {
+			j.setMsg("操作失败");
+			j.setSuccess(false);
+		}
+		super.writeJson(j);
+	}
+	
+	public void updateTrans(){
+		String base = getParameter("trans");
+		Message j = new Message();
+		try {
+			orderService.updateBase(Integer.valueOf(base));
+			getSession().setAttribute("base", Integer.valueOf(base));
+			j.setMsg("操作成功");
+			j.setSuccess(true);
+		} catch (Exception e) {
+			j.setMsg("操作失败");
+			j.setSuccess(false);
 		}
 		super.writeJson(j);
 	}

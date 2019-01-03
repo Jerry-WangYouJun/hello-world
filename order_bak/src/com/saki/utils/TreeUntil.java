@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import com.saki.entity.TreeModel;
 import com.saki.model.TProduct;
 import com.saki.model.TProductDetail;
-import com.saki.service.impl.ProductServiceImpl;
+import com.saki.model.TUserProduct;
 
 public class TreeUntil {
 
@@ -34,20 +34,21 @@ public class TreeUntil {
 		return list;
 	}
 	
-	public List<TreeModel> convertProductDetailToList(List<TProductDetail> detailList,List<Integer> detailIds)
-	{
-		
+	public List<TreeModel> convertProductDetailToList(
+			List<TProductDetail> detailList,List<TUserProduct> detailIds){
 		List<TreeModel> list = new ArrayList<TreeModel>();		
 		for (TProductDetail detail : detailList) {
 			TreeModel tree = new TreeModel();
 			tree.setId("detail_"+detail.getId());
 			tree.setPid(detail.getProductId()+"");
-			tree.setName(detail.getSubProduct()+"-"+detail.getFormat()+"-"+detail.getMaterial());
+			tree.setName(detail.getSubProduct()+"-"
+					+ (detail.getFormatNum()==null?"":detail.getFormatNum() )
+					+detail.getFormat()+"-"+detail.getMaterial());
 			
 			if(detailIds != null&&detailIds.size() !=0)
 			{
-				for (Integer detailId : detailIds) {
-					if(detailId == detail.getId())
+				for (TUserProduct detailId : detailIds) {
+					if(detailId.getProductDetailId() == detail.getId())
 					{
 						tree.setChecked(true);
 					}
@@ -59,6 +60,7 @@ public class TreeUntil {
 		return list;
 	}
 	
+	
 	public List<TreeModel> convertProductDetailToList(List<TProductDetail> detailList)
 	{
 		List<TreeModel> list = new ArrayList<TreeModel>();		
@@ -66,11 +68,14 @@ public class TreeUntil {
 			TreeModel tree = new TreeModel();
 			tree.setId("detail_"+detail.getId());
 			tree.setPid(detail.getProductId()+"");
-			tree.setName(detail.getSubProduct()+"-"+detail.getFormat()+"-"+detail.getMaterial());		
+			tree.setName(detail.getSubProduct()+"-"
+					+ (detail.getFormatNum()==null?"":detail.getFormatNum() )
+					+ detail.getFormat()+"-"+detail.getMaterial());		
 			
 			list.add(tree);
 		}
 		return list;
 	}
 	
+
 }

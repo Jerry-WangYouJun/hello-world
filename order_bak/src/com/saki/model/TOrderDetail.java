@@ -22,6 +22,9 @@ public class TOrderDetail implements java.io.Serializable {
 	private Integer productDetailId;
 	private Integer num;
 	private Double price;
+	private String brand; 
+	private Double amount;
+	private String defaultFlag;
 	private String remark;
 
 	// Constructors
@@ -31,11 +34,12 @@ public class TOrderDetail implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public TOrderDetail(Integer orderId, Integer productDetailId, Integer num, Double price, String remark) {
+	public TOrderDetail(Integer orderId, Integer productDetailId, Integer num, Double price,Double amount, String remark) {
 		this.orderId = orderId;
 		this.productDetailId = productDetailId;
 		this.num = num;
 		this.price = price;
+		this.amount = amount;
 		this.remark = remark;
 	}
 
@@ -104,4 +108,33 @@ public class TOrderDetail implements java.io.Serializable {
 		this.remark = remark;
 	}
 
+	@Column(name = "brand")
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	@Column( name = "amount")
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
+	@Column( name = "defaultFlag")
+	public String getDefaultFlag() {
+		return defaultFlag;
+	}
+
+	public void setDefaultFlag(String defaultFlag) {
+		this.defaultFlag = defaultFlag;
+	}
+	
+
+	
 }

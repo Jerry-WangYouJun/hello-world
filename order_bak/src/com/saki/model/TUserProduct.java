@@ -22,6 +22,13 @@ public class TUserProduct implements java.io.Serializable {
 	private Integer productDetailId;
 	private String status;
 	private Integer roleId;
+	private Double price ;
+	private Double markup;
+	private Double supMarkup;
+	private Double percent;
+	private Integer productId;
+	private String imgUrl;
+	//private Double taxrate; 
 
 	// Constructors
 
@@ -30,11 +37,16 @@ public class TUserProduct implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public TUserProduct(Integer companyId, Integer productDetailId, String status, Integer roleId) {
+	public TUserProduct(Integer companyId, Integer productDetailId, String status
+			, Integer roleId , Double price , Double percent ,Integer productId , Double supMarkup ) {
 		this.companyId = companyId;
 		this.productDetailId = productDetailId;
 		this.status = status;
 		this.roleId = roleId;
+		this.price = price ;
+		this.percent = percent;
+		this.productId = productId;
+		this.supMarkup = supMarkup;
 	}
 
 	// Property accessors
@@ -92,4 +104,64 @@ public class TUserProduct implements java.io.Serializable {
 		this.roleId = roleId;
 	}
 
+	@Column(name = "price")
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	@Column(name = "markup")
+	public Double getMarkup() {
+		return markup;
+	}
+
+	public void setMarkup(Double markup) {
+		this.markup = markup;
+	}
+	@Column(name = "percent")
+	public Double getPercent() {
+		return percent;
+	}
+
+	public void setPercent(Double percent) {
+		this.percent = percent;
+	}
+	@Column(name = "product_id")
+	public Integer getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Integer productId) {
+		this.productId = productId;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	@Column(name = "imgUrl")
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	@Column(name = "sup_markup")
+	public Double getSupMarkup() {
+		return supMarkup;
+	}
+	public void setSupMarkup(Double supMarkup) {
+		this.supMarkup = supMarkup;
+	}
+	
+	
+	
+//	@Column(name="taxrate")
+//	public Double getTaxrate() {
+//		return taxrate;
+//	}
+//
+//	public void setTaxrate(Double taxrate) {
+//		this.taxrate = taxrate;
+//	}
+	
 }

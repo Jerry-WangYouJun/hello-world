@@ -20,13 +20,13 @@ public interface SupllierOrderServiceI  extends BaseServiceI{
 
 	void getOrderDetail();
 
-	int getSupllierOrder();
+	int getSupllierOrder(int confirmId);
 
 	void splitOrder(String id);
 
 	int deleteDetailById(String orderId, String detailId);
 
-	List<TCompany> searchCompany();
+	List<TCompany> searchCompany(String detailId);
 	
 	public String updateDetail(String update) ;
 
@@ -34,8 +34,6 @@ public interface SupllierOrderServiceI  extends BaseServiceI{
 			String orderColumn, String page, String rows);
 
 	String updateSupllierPrice(String update);
-
-	void updateOrderStatus(String id);
 
 	String getOrderCode(String dayOfOrderNo);
 }

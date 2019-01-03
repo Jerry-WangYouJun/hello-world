@@ -1,10 +1,14 @@
 package com.saki.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -21,10 +25,12 @@ public class TProduct implements java.io.Serializable {
 	private String product;
 	private String type;
 	private String unit;
-	private String base;
+	private Integer base;
 	private String remark;
 
 	private Integer parentId;
+	private String childProName;
+	List<TProductDetail> detailList  ;
 	// Constructors
 	
 	/** default constructor */
@@ -42,7 +48,7 @@ public class TProduct implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public TProduct(Integer parentId,String product, String type, String unit, String base, String remark) {
+	public TProduct(Integer parentId,String product, String type, String unit, Integer base, String remark) {
 		this.parentId = parentId;
 		this.product = product;
 		this.type = type;
@@ -50,8 +56,7 @@ public class TProduct implements java.io.Serializable {
 		this.base = base;
 		this.remark = remark;
 	}
-	
-	public TProduct(Integer id,Integer parentId, String product, String type, String unit, String base, String remark) {
+	public TProduct(Integer id,Integer parentId, String product, String type, String unit, Integer base, String remark) {
 		this.parentId = parentId;
 		this.id = id;
 		this.product = product;
@@ -123,11 +128,11 @@ public class TProduct implements java.io.Serializable {
 
 	@Column(name = "base", length = 10)
 
-	public String getBase() {
+	public Integer getBase() {
 		return this.base;
 	}
 
-	public void setBase(String base) {
+	public void setBase(Integer base) {
 		this.base = base;
 	}
 
@@ -140,5 +145,23 @@ public class TProduct implements java.io.Serializable {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	@Transient
+	public List<TProductDetail> getDetailList() {
+		return detailList;
+	}
+
+	public void setDetailList(List<TProductDetail> detailList) {
+		this.detailList = detailList;
+	}
+
+	public String getChildProName() {
+		return childProName;
+	}
+
+	public void setChildProName(String childProName) {
+		this.childProName = childProName;
+	}
+	
+	
 
 }

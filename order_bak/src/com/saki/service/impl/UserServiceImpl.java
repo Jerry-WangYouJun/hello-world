@@ -20,10 +20,22 @@ public class UserServiceImpl implements UserServiceI{
 
 	private BaseDaoI userDao;
 	private CompanyServiceI companyService;
+	
+	@Override
+	public Grid search(Map map, String sort, String order, String page, String rows) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	@Override
 	public void add(Object object) {
-		((TUser)object).setUserPwd(MD5Util.md5("000000"));
-		userDao.save(object);
+		TUser user = (TUser)object ;
+		if(user.getUserPwd()==null || "".equals(user.getUserPwd())){
+			user.setUserPwd(MD5Util.md5("000000"));
+		}else{
+			user.setUserPwd(MD5Util.md5(user.getUserPwd()));
+		}
+		userDao.save(user);
 	}
 
 	@Override
@@ -69,7 +81,7 @@ public class UserServiceImpl implements UserServiceI{
 		Map<String, Object> params = new HashMap<String, Object>();		
 		String hql = "from TUser t";
 		if(row!=null && text!=null){
-			params.put("text", "%" + text + "%");
+			params.put("text",  Integer.valueOf(text) );
 			hql = hql + " where t." + row + " like :text";
 		}
 		if(sort!=null && order!=null){
@@ -122,10 +134,7 @@ public class UserServiceImpl implements UserServiceI{
 		
 		TUser t = (TUser) userDao.get("from TUser t where t.userName = :userName and t.userPwd = :userPwd", params);
 		if(t!=null){
-			user.setCompanyId(t.getCompanyId());
-			user.setId(t.getId());
-			user.setRoleId(t.getRoleId());
-			return user;
+			return t;
 		}
 		return null;
 	}
@@ -142,5 +151,27 @@ public class UserServiceImpl implements UserServiceI{
 	public void deleteByCompanyId(Integer id) {
 		userDao.updateHql(" delete from TUser t where t.companyId = " + id );
 		
+	}
+
+	@Override
+	public int searchUserOnly(String userName) {
+		String hql = "select 1 from TUser u  where u.userName =  '" + userName + "'";
+		return userDao.count(hql);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer getBase() {
+		String sql = "select base_money from t_base ";
+		List<Integer> list = userDao.executeSQLquery(sql);
+		return list.get(0);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Integer getTrans() {
+		String sql = "select tran_money from t_carriage ";
+		List<Integer> list = userDao.executeSQLquery(sql);
+		return list.get(0);
 	}
 }

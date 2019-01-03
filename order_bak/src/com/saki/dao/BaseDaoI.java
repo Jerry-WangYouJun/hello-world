@@ -3,6 +3,8 @@ package com.saki.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.saki.model.TProductDetail;
+
 public interface BaseDaoI<T> {
 	
 	public java.io.Serializable save(T o);
@@ -21,6 +23,7 @@ public interface BaseDaoI<T> {
 	
 	public List<T> find(String hql);
 	
+	
 	public List<T> find(String hql, Map<String, Object> params);
 	
 	public List<T> find(String hql, int page, int rows);
@@ -36,5 +39,12 @@ public interface BaseDaoI<T> {
 	public int deleteSupDetailById(String orderId, String detailId);
 
 	public void updateHql(String hql);
+
+	List<T> find(String hql, List<Object> list);
 	
+	public void  executeUpdate(String sql);
+
+	public List executeSQLquery(String sql);
+
+	public void updateSubpro(List<TProductDetail> list);
 }

@@ -1,5 +1,6 @@
-package com.saki.dao.impl;
 
+package com.saki.dao.impl;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.saki.dao.BaseDaoI;
+import com.saki.model.TProductDetail;
 import com.saki.model.TSupllierOrder;
 
 @Repository("baseDao")
@@ -100,6 +102,14 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
 		}
 		return q.list();
 	}
+	
+	//批量执行in语句 （  in (:list)）
+	@Override
+	public List<T> find(String hql, List<Object> list) {
+		Query q = this.getCurrentSession().createQuery(hql);
+		 q.setParameterList("list", list);
+		return q.list();
+	}
 
 	@Override
 	public List<T> find(String hql, Map<String, Object> params, int page,
@@ -160,6 +170,33 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
 	public void updateHql(String hql) {
 		 this.getCurrentSession().createQuery(hql).executeUpdate();
 	
+	}
+	
+	@Override
+	public void  executeUpdate(String sql){
+		 this.getCurrentSession().createSQLQuery(sql).executeUpdate();
+	}
+
+	@Override
+	public List executeSQLquery(String sql) {
+		List<Object[]> list = this.getCurrentSession().createSQLQuery(sql).list();  
+        return list; 
+	}
+
+	@Override
+	public void updateSubpro(List<TProductDetail> list) {
+		for (TProductDetail tProductDetail : list) {
+			getSessionFactory().getCurrentSession().evict(tProductDetail);
+			String subPro = tProductDetail.getSubProduct()  ;
+			if(StringUtils.isNotBlank(tProductDetail.getMaterial()) ){
+				subPro +=  "-" +  tProductDetail.getMaterial()  ;
+			}
+			if(tProductDetail.getFormatNum() != null ){
+				subPro += "-" + tProductDetail.getFormatNum() + tProductDetail.getFormat();
+			}
+			tProductDetail.setSubProduct(subPro);
+			
+		}
 	}
 	
 

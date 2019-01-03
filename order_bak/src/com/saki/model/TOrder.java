@@ -20,20 +20,25 @@ public class TOrder implements java.io.Serializable {
 
 	private Integer id;
 	private Integer companyId;
+	private Integer addressId;
+	private Integer confirmId;
 	private String orderNo;
 	private Date startDate;
-	private Date confirmDate;
+	private String confirmDate;
 	private Date pillDate;
 	private Date endDate;
+	
+	//订单状态 1：新订单 2已报价 3已付款 4确认收货  5已提交采购
 	private String status;
 	private double amount;
 	private String remark;
 	private String companyName;
-	private String locked;
+	//private String locked;
 	private String invoice;
 	private Date invoiceDate;
 	private Date invoiceGet;
 	private String percent;
+	private String urgent;
 
 	// Constructors
 
@@ -42,9 +47,11 @@ public class TOrder implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public TOrder(Integer companyId, String orderNo, Date startDate, Date confirmDate, Date pillDate, Date endDate,
+	public TOrder(Integer confirmId ,Integer companyId, Integer addressId ,String orderNo, Date startDate, String confirmDate, Date pillDate, Date endDate,
 			String status, double amount, String remark ,String invoice,Date invoiceDate,Date invoiceGet,String percent) {
+		this.confirmId = confirmId;
 		this.companyId = companyId;
+		this.addressId = addressId;
 		this.orderNo = orderNo;
 		this.startDate = startDate;
 		this.confirmDate = confirmDate;
@@ -83,6 +90,15 @@ public class TOrder implements java.io.Serializable {
 	public void setCompanyId(Integer companyId) {
 		this.companyId = companyId;
 	}
+	
+	@Column(name = "address_id")
+	public Integer getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(Integer addressId) {
+		this.addressId = addressId;
+	}
 
 	@Column(name = "order_no", length = 50)
 
@@ -105,13 +121,13 @@ public class TOrder implements java.io.Serializable {
 		this.startDate = startDate;
 	}
 
-	@Column(name = "confirm_date", length = 19)
+	@Column(name = "confirm_date", length = 10)
 
-	public Date getConfirmDate() {
+	public String getConfirmDate() {
 		return this.confirmDate;
 	}
 
-	public void setConfirmDate(Date confirmDate) {
+	public void setConfirmDate(String confirmDate) {
 		this.confirmDate = confirmDate;
 	}
 
@@ -173,14 +189,14 @@ public class TOrder implements java.io.Serializable {
 		this.companyName = companyName;
 	}
 
-	@Column(name="locked")
-	public String getLocked() {
-		return locked;
-	}
-
-	public void setLocked(String locked) {
-		this.locked = locked;
-	}
+//	@Column(name="locked")
+//	public String getLocked() {
+//		return locked;
+//	}
+//
+//	public void setLocked(String locked) {
+//		this.locked = locked;
+//	}
 
 	@Column(name ="invoice")
 	public String getInvoice() {
@@ -218,6 +234,24 @@ public class TOrder implements java.io.Serializable {
 	public void setPercent(String percent) {
 		this.percent = percent;
 	}
+	@Column(name="urgent")
+	public String getUrgent() {
+		return urgent;
+	}
+
+	public void setUrgent(String urgent) {
+		this.urgent = urgent;
+	}
+
+	@Column(name="confirm_id")
+	public Integer getConfirmId() {
+		return confirmId;
+	}
+
+	public void setConfirmId(Integer confirmId) {
+		this.confirmId = confirmId;
+	}
+	
 	
 	
 	

@@ -1,6 +1,5 @@
 package com.saki.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,12 @@ import com.saki.service.ProductDetailServiceI;
 public class ProductDetailServiceImpl implements ProductDetailServiceI{
 
 	private BaseDaoI productDetailDao;
+	
+	@Override
+	public Grid search(Map map, String sort, String order, String page, String rows) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	@Override
 	public void add(Object object) {
@@ -79,7 +84,7 @@ public class ProductDetailServiceImpl implements ProductDetailServiceI{
 		String hql =" from  TProductDetail detail  where detail.productId is not null ";		
 		return productDetailDao.find(hql);
 	}
-
+	
 	@Override
 	public TProductDetail searchProductDetailById(int id) {
 		// TODO Auto-generated method stub
@@ -102,5 +107,7 @@ public class ProductDetailServiceImpl implements ProductDetailServiceI{
 	}
 	
 	
+
+
 
 }

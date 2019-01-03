@@ -15,4 +15,5 @@ public interface ProductDetailServiceI extends BaseServiceI{
 	public void deleteById(int id);
 
 	public void deleteByProductDetail(TProductDetail tProductDetail);
+
 }

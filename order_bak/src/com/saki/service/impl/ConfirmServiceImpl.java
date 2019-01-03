@@ -28,7 +28,7 @@ public class ConfirmServiceImpl implements ConfirmServiceI{
 
 	@Override
 	public List<TConfirm> list() {
-		List<TConfirm> l = confirmDao.find("from TConfirm ");
+		List<TConfirm> l = confirmDao.find("from TConfirm order by confirmDate ");
 		return l;
 	}
 
@@ -50,6 +50,16 @@ public class ConfirmServiceImpl implements ConfirmServiceI{
 	@Override
 	public void update(TConfirm confirm) {
 		confirmDao.update(confirm);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<TConfirm> getWarningList() {
+		String hql = " from TConfirm t  where  0<= "
+				+ "( t.confirmDate  - DATE_FORMAT(now(),'%d') ) "
+				+ "   	 and   (t.confirmDate  - DATE_FORMAT(now(),'%d') "
+				+ "  ) <= 3  ";
+		return confirmDao.find(hql);
 	}
 
 
