@@ -28,7 +28,7 @@
 <link href="media/css/daterangepicker.css" rel="stylesheet"
 	type="text/css" />
 <link href="media/css/fullcalendar.css" rel="stylesheet" type="text/css" />
-<link rel="shortcut icon" href="media/image/favicon.ico" />
+<link rel="shortcut icon" href="img/logo.jpg" />
 <script src="media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
 <script src="media/js/jquery-migrate-1.2.1.min.js"
 	type="text/javascript"></script>
@@ -431,10 +431,10 @@
 				</div>
 				<!-- END PAGE HEADER-->
 
+								<img alt="" src="img/index.jpeg">
 				<!-- BEGIN 主面板 STATS -->
 				<div id="dashboard">
 	 					<div  id ="home" class="tab-content" style="margin-left: 20px">
-									
 						</div>
 				</div>
 				<!-- END 主面板 STATS -->
