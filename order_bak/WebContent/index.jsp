@@ -370,9 +370,11 @@
 						</div>
 						<script language="javascript" type="text/javascript">
 						function contactUs(){
+							 $("#home").empty();
 							 $("#contact").show();
 						}
 					        $(function () {
+					        	 $("#contact").hide();
 					            var i=0;
 					            var timer;
 					            timer=setInterval(function(){
@@ -434,7 +436,18 @@
 				</div>
 				<!-- END PAGE HEADER-->
 					
-								<img alt="" src="img/index.jpeg" id = "contact">
+								<div id = "contact" style= "margin: 30px">
+									  <h3>
+									   对公账户：</h3>
+									   <h3>
+									    公司名称:青岛众联焊割五金制品有限公司</h3>
+										<h3>开户银行:农行市北区郑州路支</h3>
+									<h3>	账号:38080401040016852
+										</h3>
+										
+										<h3>售后服务请扫下方二维码添加微信联系人：</h3>
+										<img alt="" src="img/code.jpeg">
+								</div>
 				<!-- BEGIN 主面板 STATS -->
 				<div id="dashboard">
 	 					<div  id ="home" class="tab-content" style="margin-left: 20px">
