@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -14,6 +14,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <link rel="stylesheet" href="<%=path %>/vendor/bootstrap/css/bootstrap.vertical-tabs.css">
   <link href="<%=path%>/vendor/easyui/themes/material/easyui.css" rel="stylesheet" type="text/css"> 
   <link href="<%=path%>/vendor/easyui/themes/icon.css" rel="stylesheet" type="text/css">
+   <script src="<%=path%>/vendor/jquery/jquery.min.js"></script>
+   <script src="<%=path%>/vendor/bootstrap/js/bootstrap.js"></script>   
+    <script src="<%=path%>/vendor/layer/layer.js"></script>  
   <style>
     .ccc{
       width: 25%;
@@ -27,16 +30,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       font-size: 14px;
       text-indent: 1em;
     }
-    .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
-      background: #e15446 !important;
-    }
+   
   </style>
 </head>
 <body>
-	<div data-options="region:'north',border:false,showHeader:false"  style="height:40px" >
- 		<span style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">订单类别选择</span>
- 		<button onclick="select_save()" id="select_save" type="button" class="btn btn-success" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">保存</button> 		
- 		<button onclick="reset()" id="reset" type="button" class="btn btn-danger" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">重置</button>
+<script type="text/javascript">
+var index = layer.load(2, { shade:[0.3,'#fff'] , time:10000 });  //0代表加载的风格，支持0-2
+</script>
+	<div data-options="region:'north',border:false,showHeader:false"  style="height:80px" >
+		<c:if test="${roleId eq  '3' }">
+	 		<span style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">请在下面选择您要采购的商品明细<br/>点击产品名称，可查看下一级</span>
+		</c:if>
+		<c:if test="${roleId eq  '2' }">
+	 		<span style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">产品类别选择</span>
+	 		<button  id="imageFile" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">上传产品图片</button>
+		</c:if>
+	 	<button onclick="select_save()" id="select_save" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">保存</button> 		
+ 		<button onclick="reset()" id="reset" type="button" class="btn btn-primary" style="float: right;text-align: center;margin-top: 10px;margin-right:10px">重置</button>
  	</div>
     <div class="row" style="min-height:600px;">
         <div>
@@ -47,11 +57,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <!-- 第一级 -->
             <ul class="nav nav-tabs tabs-left">
             	<s:iterator  id="product" status="st" value="#request.productList">            							
-          				 <li class="">
+          				 <li class="" onclick="activeThird(this)">
 			              	<a href="#sec_<s:property value="id"/>" data-toggle="tab">
 			              		<input type="checkbox" id="first_check_<s:property value="#product.id"/>" class="aaa" data='<s:property value="#product.id"/>'> 
 									<s:property value="#product.product"/>
-								</input>
 			              	</a>
 			              </li>       			
          		 </s:iterator>
@@ -63,13 +72,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <div class="tab-content">			            
             	 <s:iterator id="product" status='st' value='#request.productList'>           	 	
 	            	 	 <div class="tab-pane clearfix" id="sec_<s:property value="id"/>">             
-			                  <ul class="nav nav-tabs tabs-left">
+			                  <ul class="nav nav-tabs tabs-left ">
 			                  	<s:iterator id="child" value="#product.children" status='in' >		                  		
-					                  	<li class="">
-							              	<a href="#third_<s:property value="#child.id"/>" data-toggle="tab"> 
+					                  	<li class="secTab">
+							              	<a href="#third_<s:property value="#child.id"/>" data-toggle="tab" > 
 							              		<input type="checkbox" id='sec_check_<s:property value="#child.id"/>' data='<s:property value="#child.id"/>' class="aaa" data-parent='<s:property value='#child.parentId'/>'> 							              			
 			                      						<s:property value="#child.product"/>							              											              
-							              		</input>
+							              		
 							              	</a>
 							             </li>				             	
 			                  	</s:iterator>					              					             
@@ -90,14 +99,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			                        <input type="checkbox" value="<s:property value="#child.productId"/>" id="third_check_<s:property value="#child.id"/>"data='<s:property value="#child.id"/>' data-parent='<s:property value="#child.productId"/>'>
 			                        <label for="third_check_<s:property value="#child.id"/>" style="font-size:15">
 			                        <a style="text-decoration:none">
-			                        	<s:property value="#child.subProduct"/>/
-			                        	<s:property value="#child.format"/>/
+			                        	<s:property value="#child.subProduct"/>-
+			                        	<s:property value="#child.formatNum"/>
+			                        	<s:property value="#child.format"/>-
 			                        	<s:property value="#child.material"/>
 			                        </a></label>
 			                    </span>	                   
 		                    </s:iterator>
 		                  </p>
-		              </div>	                     
+			              <div><img alt="" src="" id="img_<s:property value="#secProduct.id"/>" class="col-md-8"></div>                     
+		              </div>
               </s:iterator>
             </div>
           </div>
@@ -105,25 +116,49 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
         </div>
         </div>
-   <script src="<%=path%>/vendor/jquery/jquery.min.js"></script>
-   <script src="<%=path%>/vendor/bootstrap/js/bootstrap.js"></script>     
  <%--  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> --%>
   <script>
+  $("#imageFile").click(function(){
+	    var proId = $("li.active :input")[1].getAttribute("data");
+		layer.open({
+			  type: 2,
+			  title: '导入',
+			  shadeClose: true,
+			  shade: 0.8,
+			  area: ['450px', '40%'],
+			  content: '<%=path%>/report!importInit.action?proId=' + proId //iframe的url
+		});
+	});
+  	
+  
     $('.aaa').click(function(event){
       event.stopPropagation()
     })
     
     //加载选择的商品
     $(function(){
-    	$.post("<%=path%>/productAction!getUserSelectProductDetail.action",function(data){
-    		var json = JSON.parse(data);   	
-    		for (var i = 0; i < json.length; i++) {
-				var obj = json[i];
-				$("#third_check_"+obj).prop('checked',true);
-				
-			} 
-    	})
+    	
+    	$.ajax({
+            type: 'POST',
+            url: '<%=path%>/productAction!getUserSelectProductDetail.action',//发送请求
+            dataType : "json",
+            success: function(data) {
+            	layer.close(index);
+            	for (var i = 0; i < data.length; i++) {
+    				var obj = data[i];
+    				$("#third_check_"+obj.productDetailId).prop('checked',true);
+    				if(obj.imgUrl){
+    					$("#img_"+obj.productId).attr('src', "/ring/upload/"+obj.imgUrl);
+    				}
+    				var parentId = $("#third_check_"+obj.productDetailId).attr("data-parent");
+    				 $("#sec_check_"+parentId).prop('checked',true);
+    				 var firstIndex  = $("#sec_check_"+parentId).attr("data-parent");
+    				 $("#first_check_"+firstIndex).prop('checked',true);
+    			} 
+		      }
+		});
+
     	//一级类型选择 
     	$("[id^='first_check_']").change(function(){
     		var obj = $(this).attr("data");
@@ -158,6 +193,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		if($(this).prop("checked"))
 			{
 			 $("#third_"+obj).find("input:checkbox").prop("checked",true);
+			 var parentId = $(this).attr("data-parent");
+			 $("#first_check_"+parentId).prop('checked',true);
 			}
 			else
 			{
@@ -177,17 +214,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	
     	//三级类型 选择
     	$("[id^='third_check_']").change(function(){
+    		if($(this).prop("checked"))
+			{
+			 var parentId = $(this).attr("data-parent");
+			 $("#sec_check_"+parentId).prop('checked',true);
+			 var firstIndex  = $("#sec_check_"+parentId).attr("data-parent");
+			 $("#first_check_"+firstIndex).prop('checked',true);
+			}
     		//判断是否应该取消二级选择
     		var parentId = $(this).attr("data-parent");
-    		if($("#third_"+parentId).find("input:checked").length==0)
-    			{
+    		if($("#third_"+parentId).find("input:checked").length==0){
     				$("#sec_check_"+parentId).prop('checked',false);
-    			}
-    		else if($("#third_"+parentId).find("input:checked").length ==$("#third_"+parentId).find("input:checkbox").length)
-    			{
+    		}else if($("#third_"+parentId).find("input:checked").length ==$("#third_"+parentId).find("input:checkbox").length){
 					$("#sec_check_"+parentId).prop('checked',true);
-    			}
+    		}
     		
+    		 var firstIndex  = $("#sec_check_"+parentId).attr("data-parent");
+			 $("#first_check_"+firstIndex).prop('checked',true);
+			 if($("#sec_"+firstIndex).find("input:checked").length==0){
+ 				 $("#first_check_"+firstIndex).prop('checked',false);
+ 			 }else if($("#sec_"+firstIndex).find("input:checked").length ==$("#sec_"+firstIndex).find("input:checkbox").length){
+				 $("#first_check_"+firstIndex).prop('checked',true);
+ 			 }
+    	})
+    	
+    	
+    	$("[id^='third_check_']").each(function(){
+    		var parentId = $(this).attr("data-parent");
+    		if($(this).prop("checked"))
+			{
+			 var parentId = $(this).attr("data-parent");
+			 $("#sec_check_"+parentId).prop('checked',true);
+			 var firstIndex  = $("#sec_check_"+parentId).attr("data-parent");
+			 $("#first_check_"+firstIndex).prop('checked',true);
+			}
+    		//判断是否应该取消二级选择
+    		var parentId = $(this).attr("data-parent");
+    		if($("#third_"+parentId).find("input:checked").length==0){
+    				$("#sec_check_"+parentId).prop('checked',false);
+    		}else if($("#third_"+parentId).find("input:checked").length ==$("#third_"+parentId).find("input:checkbox").length){
+					$("#sec_check_"+parentId).prop('checked',true);
+    		}
+    		
+    		 var firstIndex  = $("#sec_check_"+parentId).attr("data-parent");
+			 $("#first_check_"+firstIndex).prop('checked',true);
+			 if($("#sec_"+firstIndex).find("input:checked").length==0){
+ 				 $("#first_check_"+firstIndex).prop('checked',false);
+ 			 }else if($("#sec_"+firstIndex).find("input:checked").length ==$("#sec_"+firstIndex).find("input:checkbox").length){
+				 $("#first_check_"+firstIndex).prop('checked',true);
+ 			 }
     	})
     	
     	
@@ -200,6 +275,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	$('input[type="checkbox"]').prop('checked',false);
     }
     
+   
     //保存
     function select_save(){
 		var productlist="";	
@@ -217,6 +293,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		//console.log(productlist);			
 		$.ajax({ 
 			url: '${pageContext.request.contextPath}/productAction!saveUserProduct.action',	
+			type: 'POST',
 			data : {'productlist':productlist},		
 			dataType : 'json',
 			success : function(obj){
@@ -230,7 +307,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});			
 	}
     
-    
+     function activeThird(obj){
+    	 if(!$(obj).hasClass("active")){
+	    	 $(".col-xs-8  .tab-pane" ).removeClass("active");
+	    	 $(".secTab").removeClass("active");
+    	 }
+     }
   </script>
 </body>
 </html>
