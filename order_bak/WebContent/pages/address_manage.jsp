@@ -55,7 +55,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					{field:'companyName',title:'公司',width:50,align:'center',formatter:function(value,row,index){
                         return row.company.name;
                     }},
-					{field:'name',title:'地址',width:30,align:'center'},
+					{field:'name',title:'地址标签',width:30,align:'center'},
 					{field:'province',title:'省',width:20,align:'center'},
 					{field:'city',title:'市',width:20,align:'center'},
 					{field:'address',title:'详细地址',width:100,align:'center'},
@@ -167,7 +167,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input type="hidden"  name="id" >
 						<input type="hidden"  name="cid" >
 					  <div class="form-group">
-					    <label for="firstname" class="col-sm-2 control-label">地址描述：</label>
+					    <label for="firstname" class="col-sm-2 control-label">地址标签：</label>
 					    <div class="col-sm-4">
 					      <input type="text" class="form-control" id="name" name="name" placeholder="必填" required>
 					    </div>

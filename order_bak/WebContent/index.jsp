@@ -326,9 +326,11 @@
 								</c:if>
 							</ul>
 					</li>
-					<li class="last active-menu"><a href="#" onclick="contactUs()"> <i
+					<c:if test="${roleId ne 1 }">
+						<li class="last active-menu"><a href="#" onclick="contactUs()"> <i
 								class="icon-bar-chart"></i> <span class="title">联系我们</span>
 						</a></li>
+						</c:if>
 			</ul>
 			<!-- END SIDEBAR MENU -->
 		</div>

@@ -59,7 +59,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <script type="text/javascript">
     function getimgUrl(){
   	  var row = $('#company_table').datagrid('getSelected');
-  	  var img = "<img src='/ring/upload/"+row.imgUrl+"' id='img1' width='90%' height='90%' />"
+  	  var img = "<div><button type='button' onclick='xuanzhuan()'>旋转90°</button></div><div id='imgDiv' style='margin:20px' ><img src='/ring/upload/"+row.imgUrl+"' id='img1' width='90%' height='90%' /><div>"
   	      layer.tab({
   	        area: ['90%', '90%'],
   	        tab: [{
@@ -67,6 +67,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	          content: img
   	        }]
   	      }); 
+    }
+    function getNaturalSize (Domlement) {
+    	 var natureSize = {};
+    	 if(window.naturalWidth && window.naturalHeight) {
+    	  natureSize.width = Domlement.naturalWidth;
+    	  natureSize.height = Domlement.naturalHeight;
+    	 } else {
+    	  var img = new Image();
+    	  img.src = Domlement.src;
+    	  natureSize.width = img.width;
+    	  natureSize.height = img.height;
+    	 }
+    	 return natureSize;
+    	}
+    	 
+    
+    
+    	var current =  0 ;
+    function xuanzhuan(){
+    	 current = (current+90)%360;
+        /*  alert($("#imgDiv")); */
+         var img = $("#img1")[0];
+         // 打印
+         //alert('width:'+img.offsetWidth +',height:'+img.offsetHeight);
+         if(img.offsetWidth > img.offsetHeight){
+        	 		$("#img1")[0].style.transform = 'rotate('+current+'deg)scale('+ img.offsetHeight/img.offsetWidth +' , ' + img.offsetHeight/img.offsetWidth + ')';
+         }else{
+	         $("#img1")[0].style.transform = 'rotate('+current+'deg)';
+         }
     }
     
     function query(){
