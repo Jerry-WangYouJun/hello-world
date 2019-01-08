@@ -67,6 +67,10 @@ public class AddressServiceImpl implements AddressServiceI{
 
 	@Override
 	public void save(TAddress record) {
+		if("1".equals(record.getIsDefault())) {
+			String hql = "update TAddress  set isDefault = '0' where cid =  " +  record.getCid();
+			addressDao.updateHql(hql);
+		}
 			addressDao.save(record);
 		
 	}
