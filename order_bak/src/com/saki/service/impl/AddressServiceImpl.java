@@ -81,7 +81,6 @@ public class AddressServiceImpl implements AddressServiceI{
 		params.put("id", id);
 		TAddress t = (TAddress) addressDao.get("from TAddress  t where t.id = :id", params);
 		addressDao.delete(t);
-		
 	}
 
 	@Override
