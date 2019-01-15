@@ -142,6 +142,12 @@ public class ImportExcelImpl  implements ImportExcelI{
 		}
 	}
 	
+	/**
+	 * 把每一行数据放到一个product对象中
+	 * @param list
+	 * @return
+	 * @throws Exception
+	 */
 	private TProduct getProductByList(List<Object> list) throws Exception {
 		TProduct product = new TProduct();
 		List<String>  proDetailNameList = new ArrayList<>(); 
