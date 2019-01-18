@@ -310,7 +310,7 @@
 					</c:if>
 					<li class="">
 							<a href="javascript:;"> <i class="icon-th"></i>
-								<span class="title">订单管理</span> <span class="arrow "></span></a>
+								<span class="title" style="font-weight: 900;">订单管理</span> <span class="arrow "></span></a>
 							<ul class="sub-menu">
 								<c:if test="${roleId eq 1 }">
 									<li class="active-menu"><a href="#" onclick="openTab('客户订单管理','${basePath}/pages/admin_order_manage.jsp')"> 快速下单</a></li>

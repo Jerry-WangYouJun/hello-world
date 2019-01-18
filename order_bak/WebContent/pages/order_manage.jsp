@@ -679,30 +679,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 function print(){
 			 order_detail();
 	    		var row = $('#table_order').datagrid('getSelected');
-	    		setTimeout( function(){
-		    		$("#order_form").hide();
-		    		$("#table_print").show();
-		    		$("#companyNamePrt>span").append(row.companyName);
-		    		$("#orderNoPrt>span").append(row.orderNo);
-		    		$("#amountPrt>span").append(row.amount);
-		    		$("#confirmIdPrt>span").append($("#confirmId").find("option:selected").text());
-		    		$("#statusPrt>span").append(getDicValue('status',row.status ,row));
-		    		$("#invoicePrt>span").append(getDicValue('invoice',row.invoice ,row));
-		    		$("#startDatePrt>span").append(row.startDate);
-		    		$("#pillDatePrt>span").append(row.pillDate);
-		    		var rows = $('#table_add').datagrid('getData');
-		    		$("#addressPrt>span").append($("#addressId").find("option:selected").text()); 
-				 $("#order_dlg").jqprint({
-					 debug: false,
-					 importCSS: true,
-					 printContainer: true,
-					 operaSupport: false
-				 });
-		    		$("#order_form").show();
-		    		$("#table_print").hide();
-		    		$("#table_print  span").text('');
-			 	 company_close();
-				 },1000)
+	    		if(row){
+		    		setTimeout( function(){
+			    		$("#order_form").hide();
+			    		$("#table_print").show();
+			    		$("#companyNamePrt>span").append(row.companyName);
+			    		$("#orderNoPrt>span").append(row.orderNo);
+			    		$("#amountPrt>span").append(row.amount);
+			    		$("#confirmIdPrt>span").append($("#confirmId").find("option:selected").text());
+			    		$("#statusPrt>span").append(getDicValue('status',row.status ,row));
+			    		$("#invoicePrt>span").append(getDicValue('invoice',row.invoice ,row));
+			    		$("#startDatePrt>span").append(row.startDate);
+			    		$("#pillDatePrt>span").append(row.pillDate);
+			    		var rows = $('#table_add').datagrid('getData');
+			    		$("#addressPrt>span").append($("#addressId").find("option:selected").text()); 
+					 $("#order_dlg").jqprint({
+						 debug: false,
+						 importCSS: true,
+						 printContainer: true,
+						 operaSupport: false
+					 });
+			    		$("#order_form").show();
+			    		$("#table_print").hide();
+			    		$("#table_print  span").text('');
+				 	 company_close();
+					 },1000)
+	    		}
 		 }
    
     </script>

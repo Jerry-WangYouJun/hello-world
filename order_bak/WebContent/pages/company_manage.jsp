@@ -303,20 +303,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                </select>
 	            </div>
             </c:if>
-            <c:if test="${role == 3 }">
 	            <div class="form-group col-md-6">
 	            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">企业类型：</label>
 	                <select name="roleId" id="roleId"  
 	                    		class="form-control select2 easyui-combobox" style="width: 45%;height: 86%" editable="false">
+	            <c:if test="${role == 3 }">
 	                	<option value="3">客户</option>
+	            </c:if>
+	             <c:if test="${role == 2 }">
+	                	<option value="2">供应商</option>
+	            </c:if>
 	                </select>
 	            </div>
-            </c:if>
             <c:if test="${role == 2 }">
+            <div class="form-group col-md-6  business" style="margin-bottom:0px;">
+            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">主营业务：</label>
+                <input name="business" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
+            </div>
             <div class="form-group col-md-6 brand">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">品牌：</label>
                 <input name="brand" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
+            	<label class="col-md-12 brand" style="color:red;display: inline-block;text-align: left;margin-bottom: 15px;margin-left: 15px;">注意：请填写主要生产产品，便于平台进行推荐</label>
             </c:if>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">登录账号：</label>
@@ -331,11 +339,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">联系电话：</label>
                 <input name="telphone" class=" form-control"  style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
-            <div class="form-group col-md-6  business" style="margin-bottom:0px;">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">主营业务：</label>
-                <input name="business" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
-            </div>
-            <div class="form-group col-md-6 business" style="margin-bottom:0px;">
+            
+            <div class="form-group col-md-6 ">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">企业星级：</label>
                 <select name = "level"  class=" form-control" style="display: inline-block;width: 45%" >
                 	 <option >一星</option>
@@ -345,15 +350,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 	 <option >五星</option>
                 </select>
             </div>
-            	<label class="col-md-12 brand" style="color:red;display: inline-block;text-align: left;margin-bottom: 15px;margin-left: 15px;">注意：请填写主要生产产品，便于平台进行推荐</label>
-            
             <div class="form-group col-md-6">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">税号：</label>
-                <input name="tax" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
+            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">开户银行：</label>
+                <input name="bank" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">银行账号：</label>
                 <input name="card" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
+            </div>
+            <div class="form-group col-md-6">
+            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">税号：</label>
+                <input name="tax" class=" form-control" style="display: inline-block;width: 45%" placeholder="必填" required>
             </div>
             <div class="form-group col-md-6">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">地址：</label>

@@ -141,6 +141,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function print(){
 			 order_detail();
 	    		var row = $('#table_order').datagrid('getSelected');
+	    		conosle.info(row)
 	    		setTimeout( function(){
 		    		$("#order_form").hide();
 		    		$("#table_print").show();
