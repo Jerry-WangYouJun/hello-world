@@ -20,12 +20,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    <jsp:include page="/common.jsp"></jsp:include>
    <script src="${basePath}/js/edit.js"></script>
    <script language="javascript" src="${basePath}/js/jquery.jqprint-0.3.js"></script>
-    <style >
-    .haokan ul{
-    			height: 250px;
-            margin-left: 350px;
-        }
-    </style>
   </head>
  <body class="easyui-layout">
  	<div data-options="region:'north',border:false,showHeader:false"  style="height:60px" >
@@ -68,94 +62,50 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </select>
                 <button onclick="query()">查询</button>
             </div> 
- 				<table id="table_order" class="easyui-datagrid" fit="false" ></table>
+ 				<table id="table_order" class="easyui-datagrid" fit="true" ></table>
  	</div>
- 	<div  id="order_dlg" closed="true" class="easyui-dialog" style="width:800px;height: 100%"
+ 	<div  id="order_dlg" closed="true" class="easyui-dialog" style="width:800px;height: 450px"
 			data-options="border:'thin',cls:'c1',collapsible:false,modal:true,closable:false,top:10,buttons: '#company_dlg_buttons'">
-		   <div class="easyui-layout"data-options="fit:true">
-	            <div data-options="region:'north'" style="height:120px">
-	                	<form id="order_form" role="form" style="padding: 20px">
-						<input type="hidden"  id = "id"  name = "id">
-				    		<div class="form-group col-md-6">
-				            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">订单编号：</label>
-				                <input name="orderNo" id="orderNo" class="form-control" style="display: inline-block;width: 40%" disabled="disabled">
-				        </div>
-				        <div class="form-group col-md-6">
-				                	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">下单时间：</label>
-				                <input name="startDate" id = "startDate" class="easyui-datebox" style="display: inline-block;width: 40%"  disabled="disabled">
-				        </div>
-				        <div class="form-group col-md-8">
-				                	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">请选择采购日：</label>
-				                <select name="confirmId" id= "confirmId" class="easyui-combobox" style="display: inline-block;width: 20%"  disabled="disabled">
-				                	 <c:forEach items="${confirm}" var="it">
-				                	 	 <option value="${it.id}"> ${it.confirmDate}日</option>
-				                	 </c:forEach>
-				                </select>
-				        </div>
-				    	</form> 
-			    		<div>
-						<table  id="table_print"  class="table" style="display: none;height: 180px">
-							<tr class="table_print" style="display: none;">
-									<td style="margin:10px;">
-											<h4>青岛众联焊割五金制品有限公司</h4>
-											税号:91370203MA3FF5FN5A &nbsp;采购网址：www.cglm2017.com<br/>
-											账号:农行市北区郑州路支行38080401040016852<br/>
-											地址：青岛市市北区镇平路1号-9 &nbsp;电话:18561852354<br/>
-											<br/>
-									</td>
-							</tr>
-					    		 <tr>
-					    		 	 <td id="companyNamePrt">公司：<span></span></td>
-					    		 	 <td id="orderNoPrt">订单编号：<span></span></td>
-					    		 </tr>
-					    		 <tr>
-					    		 	 <td id="amountPrt">订单总价：<span></span></td>
-					    		 	 <td id="confirmIdPrt">采购批次：<span></span></td>
-					    		 </tr>
-					    		 <tr>
-					    		 	 <td id="statusPrt">订单状态：<span></span></td>
-					    		 	 <td id="invoicePrt">发票状态：<span></span></td>
-					    		 </tr>
-					    		 <tr>
-					    		 	 <td id="startDatePrt">下单时间：<span></span></td>
-					    		 	 <td id="pillDatePrt">付款时间：<span></span></td>
-					    		 </tr>
-					    	</table>
-				    	</div>
-	            </div>
-	            <div data-options="region:'center'">
-	                <table id="table_add" class="easyui-datagrid" fit="false" ></table>  
-	               <div class="table_print" style="display: none;">
-		                <div style="margin: 20px">
-		                		
-			                双方责权:<br/>
-							1.双方在平等互利的情况下，依据《中国人民合同法》达成协议。<br/>
-							2.供货方必须保证产品品牌、型号符合甲方要求。<br/>
-							3.供货方在采购方付完货款后的一个采购周期内，送货至收货地点。<br/>
-							4.采购方尽全力帮助供货方快速完成货物的装卸及清点。<br/>
-							5.采购方验收货物合格后，收货人在送货单签字，供货方留底。<br/>
-							6.此合同采购方付款时生效。<br/>
-							7.供货方提供的产品按照厂家的质保细则进行包换包退。<br/>
-							8.由于天灾、国家政策变更等不可抗拒因素所造成的违约，双方均不承担违约责任。<br/>
-							9.未尽事宜双方协商解决。<br/>
-		                
-		                </div>
-		                <div style="position:relative;">
-	
-						　　<img alt="" src="${basePath}/img/print_pic.jpg" style="width:300px;height:250px"> 
-						
-							<div style="position:absolute; z-index:2; left:330px; top:10px;">
-			                		<ul style="list-style:none; ">
-						        			<li style=" padding-top: 10px">	  <h4 style="margin: 2px">	采购方：</h4></li>
-										<li style="margin: 0px">		<h4 style="margin: 2px">联系人：</h4></li>
-										<li style="margin: 0px">		<h4 style="margin: 2px">	联系电话：</h4></li>
-										<li style="margin: 0px">		<h4 style="margin: 2px">签章：</h4></li>
-								</ul>
-						    </div>
-						</div>
-	               </div>
-	            </div>
-	        </div>
+		    	<form id="order_form" role="form" style="padding: 20px">
+				<input type="hidden"  id = "id"  name = "id">
+		    		<div class="form-group col-md-6">
+		            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">订单编号：</label>
+		                <input name="orderNo" id="orderNo" class="form-control" style="display: inline-block;width: 40%" disabled="disabled">
+		        </div>
+		        <div class="form-group col-md-6">
+		                	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">下单时间：</label>
+		                <input name="startDate" id = "startDate" class="easyui-datebox" style="display: inline-block;width: 40%"  disabled="disabled">
+		        </div>
+		        <div class="form-group col-md-8">
+		                	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">请选择采购日：</label>
+		                <select name="confirmId" id= "confirmId" class="easyui-combobox" style="display: inline-block;width: 20%"  disabled="disabled">
+		                	 <c:forEach items="${confirm}" var="it">
+		                	 	 <option value="${it.id}"> ${it.confirmDate}日</option>
+		                	 </c:forEach>
+		                </select>
+		        </div>
+		    	</form>   
+		    	<div>
+				<table  id="table_print"  class="table" style="display: none">
+			    		 <tr>
+			    		 	 <td id="companyNamePrt">公司：<span></span></td>
+			    		 	 <td id="orderNoPrt">订单编号：<span></span></td>
+			    		 </tr>
+			    		 <tr>
+			    		 	 <td id="amountPrt">订单总价：<span></span></td>
+			    		 	 <td id="confirmIdPrt">采购批次：<span></span></td>
+			    		 </tr>
+			    		 <tr>
+			    		 	 <td id="statusPrt">订单状态：<span></span></td>
+			    		 	 <td id="invoicePrt">发票状态：<span></span></td>
+			    		 </tr>
+			    		 <tr>
+			    		 	 <td id="startDatePrt">下单时间：<span></span></td>
+			    		 	 <td id="pillDatePrt">付款时间：<span></span></td>
+			    		 </tr>
+			    	</table>
+		    	</div>
+			    	<table id="table_add" class="easyui-datagrid" fit="true" ></table>              
 		</div>
 	<div id="company_dlg_buttons" style="width:600px;height: 40px;text-align: center">
 			<button onclick="company_close()" type="button" class="btn btn-default btn-dialog-right">关闭</button>
@@ -166,8 +116,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	     <a onclick="order_status('3')" class="easyui-linkbutton"  plain="true" iconCls="icon-ok" style="margin: 2px">确认付款</a>    
          <a onclick="invoice_status('1')" class="easyui-linkbutton"  plain="true"  style="margin: 2px">发票已开</a>
           <a onclick="exportOrder()" class="easyui-linkbutton"  plain="true" iconCls="icon-print" style="margin: 2px">导出Excel</a>
+         <a onclick="printSign()" class="easyui-linkbutton"  plain="true" iconCls="icon-print" style="margin: 2px">带印章打印</a>
           <a onclick="print()" class="easyui-linkbutton"  plain="true" iconCls="icon-print" style="margin: 2px">打印</a>
-           <a onclick="printSign()" class="easyui-linkbutton"  plain="true" iconCls="icon-print" style="margin: 2px">带签章打印</a>
     </div>
 		   
     <script type="text/javascript">
@@ -213,37 +163,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				 });
 		    		$("#order_form").show();
 		    		$("#table_print").hide();
-		    		$("#table_print  span").text('');
-			 	 company_close();
-				 },1000)
-		 }
-    	
-    	function printSign(){
-			 order_detail();
-	    		var row = $('#table_order').datagrid('getSelected');
-	    		setTimeout( function(){
-		    		$("#order_form").hide();
-		    		$("#table_print").show();
-		    		$(".table_print").show();
-		    		$("#companyNamePrt>span").append(row.companyName);
-		    		$("#orderNoPrt>span").append(row.orderNo);
-		    		$("#amountPrt>span").append(row.amount);
-		    		$("#confirmIdPrt>span").append($("#confirmId").find("option:selected").text());
-		    		$("#statusPrt>span").append(getDicValue('status',row.status ,row));
-		    		$("#invoicePrt>span").append(getDicValue('invoice',row.invoice ,row));
-		    		$("#startDatePrt>span").append(row.startDate);
-		    		$("#pillDatePrt>span").append(row.pillDate);
-		    		var rows = $('#table_add').datagrid('getData');
-		    		$("#addressPrt>span").append($("#addressId").find("option:selected").text()); 
-				 $("#order_dlg").jqprint({
-					 debug: false,
-					 importCSS: true,
-					 printContainer: true,
-					 operaSupport: false
-				 });
-		    		$("#order_form").show();
-		    		$("#table_print").hide();
-		    		$(".table_print").hide();
 		    		$("#table_print  span").text('');
 			 	 company_close();
 				 },1000)
@@ -368,8 +287,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			   
 			});
 			
-			$(".datagrid-row-alt").css("backgroundColor" , "#a9f9f9");
-			
+			$(".datagrid-row-alt").css("backgroundColor" , "#a9f9f9")
 		});
     	
     	var editIndex = undefined;
@@ -400,14 +318,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					pagination: true,
    					fitColumns: true,
    					singleSelect: true,
-   					collapsible:true,
    					striped:true,
    					toolbar: toolbarAdmin,
    					columns:columnDetail
    				});
 			//$("#table_add").datagrid("hideColumn","amount");
 		});
-    	
+    	function printSign(){
+    		var row = $('#table_order').datagrid('getSelected');
+    		var str= "?falg=1";
+    		for(col in row){
+    			 str  += ("&" + col + "=" + row[col])
+    		}
+    		str += ("&address=" + $("#addressId").find("option:selected").text().replace(/\s+/g,""))
+    		str += ("&confirm=" + $("#confirmId").find("option:selected").text().replace(/\s+/g,""))
+    		
+    		window.open("${pageContext.request.contextPath}/orderAction!loadByOrderId.action" + str);
+	 }
     </script>
 </body>
 </html>
