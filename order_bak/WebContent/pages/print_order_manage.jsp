@@ -32,13 +32,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		   <div class="easyui-layout"data-options="fit:true" id="order_dlg">
 	            <div data-options="region:'center'">
 			    		<div>
-							<div class="table_print" style="">
-											<h4>青岛众联焊割五金制品有限公司</h4>
-											税号:91370203MA3FF5FN5A &nbsp;采购网址：www.cglm2017.com<br/>
-											账号:农行市北区郑州路支行38080401040016852<br/>
-											地址：青岛市市北区镇平路1号-9 &nbsp;电话:18561852354<br/>
-											<br/>
-							</div>
+			    			<div style="position:relative;">
+							<div style="position:absolute; z-index:2;  top:10px;">
+			                		
+						    </div>
+							<div style="position:absolute; z-index:2; left:150px; top:5px;">
+			                		<h4>青岛众联焊割五金制品有限公司</h4>
+								税号:91370203MA3FF5FN5A &nbsp;采购网址：www.cglm2017.com<br/>
+								账号:农行市北区郑州路支行38080401040016852<br/>
+								地址：青岛市市北区镇平路1号-9 &nbsp;电话:18561852354<br/>
+								<br/>
+						    </div>
+						    
+						    　<img alt="" src="${basePath}/img/print_logo.jpg" style="width:100px;height:100px;margin-left: 10px "> 
+						</div>
+			    			 <div style="position:relative;">
+								<div class="table_print" style="position:absolute; z-index:2; left:350px; top:10px;">
+												
+								</div>
+			    			
+			    			</div>
 						<table  id="table_print"  class="table" style="width: 60%">
 					    		 <tr>
 					    		 	 <td id="">公司：<span>${companyName }</span></td>
@@ -70,10 +83,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                
 		                </div>
 		                <div style="position:relative;">
-	
-						　　<img alt="" src="${basePath}/img/print_pic.jpg" style="width:300px;height:250px"> 
-						
-							<div style="position:absolute; z-index:2; left:330px; top:10px;">
+							<div style="position:absolute; z-index:2;  top:10px;">
+			                		<ul style="list-style:none; ">
+						        			<li style=" padding-top: 10px">	  <h4 style="margin: 2px">供货方：青岛众联焊割五金制品有限公司</h4></li>
+										<li style="margin: 0px">		<h4 style="margin: 2px">联系人：王涛</h4></li>
+										<li style="margin: 0px">		<h4 style="margin: 2px">	联系电话：18561852354</h4></li>
+										<li style="margin: 0px">		<h4 style="margin: 2px">签章：</h4></li>
+								</ul>
+						    </div>
+							<div style="position:absolute; z-index:2; left:350px; top:10px;">
 			                		<ul style="list-style:none; ">
 						        			<li style=" padding-top: 10px">	  <h4 style="margin: 2px">	采购方：</h4></li>
 										<li style="margin: 0px">		<h4 style="margin: 2px">联系人：</h4></li>
@@ -81,6 +99,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 										<li style="margin: 0px">		<h4 style="margin: 2px">签章：</h4></li>
 								</ul>
 						    </div>
+						    
+						    　<img alt="" src="${basePath}/img/sign.jpg" style="width:300px;height:250px;margin-left: 40px "> 
 						</div>
 	               </div>
 	            </div>

@@ -326,14 +326,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
     	function printSign(){
     		var row = $('#table_order').datagrid('getSelected');
-    		var str= "?falg=1";
-    		for(col in row){
-    			 str  += ("&" + col + "=" + row[col])
+    		if(row){
+	    		var str= "?falg=1";
+	    		for(col in row){
+	    			 str  += ("&" + col + "=" + row[col])
+	    		}
+	    		str += ("&address=" + $("#addressId").find("option:selected").text().replace(/\s+/g,""))
+	    		str += ("&confirm=" + $("#confirmId").find("option:selected").text().replace(/\s+/g,""))
+	    		
+	    		window.open("${pageContext.request.contextPath}/orderAction!loadByOrderId.action" + str);
     		}
-    		str += ("&address=" + $("#addressId").find("option:selected").text().replace(/\s+/g,""))
-    		str += ("&confirm=" + $("#confirmId").find("option:selected").text().replace(/\s+/g,""))
-    		
-    		window.open("${pageContext.request.contextPath}/orderAction!loadByOrderId.action" + str);
 	 }
     </script>
 </body>
