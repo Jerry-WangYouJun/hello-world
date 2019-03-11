@@ -388,9 +388,11 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 		String deleteSupllierOrder = "delete from TSupllierOrder where status = 1 ";
 		supplierOrderDao.updateHql(deleteSupllierOrder);
 		//更新已已付款订单的订单状态
-		String resetOrderStatus = "update TOrder t set t.status = 3  where  "
-				+ " t.confirmDate in ( " + dates.substring(0, dates.length()-1) + " )";
-		supplierOrderDao.updateHql(resetOrderStatus);
+		if(StringUtils.isNotEmpty(dates)){
+			String resetOrderStatus = "update TOrder t set t.status = 3  where   1=1 " ;
+			dates += " and t.confirmDate in ( " + dates.substring(0, dates.length()-1) + " )";
+			supplierOrderDao.updateHql(resetOrderStatus);
+		}
 	}
 	/**
 	 * 根据采购日ID获取需要生成采购订单的客户订单信息
