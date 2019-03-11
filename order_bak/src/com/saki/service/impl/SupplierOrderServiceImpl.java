@@ -278,12 +278,14 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	 */
 	@Override
 	public int getSupllierOrder(int confirmId) {
-		String dayOfOrderNo = DateUtil.getUserDate("yyyyMMdd");
-		updateSupplierReset(dayOfOrderNo);
+		if(confirmId == 0 ) {
+			updateSupplierReset();
+		}
 	    List<TOrderDetail> orderDetailList =  getOrderDetailsForSupplierOrder(confirmId);
 	    if(orderDetailList == null ||orderDetailList.size() == 0 ){
 	    	 return 0;
 	    }
+	    //品牌ID-orderdetailList map  list中是
 	    Map<String , List<TOrderDetail>> detailMapWithCompany = 
 	    		new HashMap<>();
 	    for(TOrderDetail orderDetail : orderDetailList) {
@@ -332,6 +334,7 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	    supOrder.setAmount(amount);
 	    supOrder.setStatus("1");//0代表新订单状态
 	    supOrder.setSupplierOrderNo("GH"  + dayOfOrderNo +  getOrderCode(dayOfOrderNo) );
+	    supOrder.setConfirmDate(dayOfOrderNo);
 	    add(supOrder);
 	    
 	    /**插入供应商详情**/
@@ -369,16 +372,24 @@ public class SupplierOrderServiceImpl implements SupllierOrderServiceI{
 	}
 	
 	
-	private void updateSupplierReset(String dayOfOrderNo) {
+	private void updateSupplierReset( ) {
+		String sql = "select distinct(t.confirmDate) from TSupllierOrder t where status = 1" ;
+		List<String>  confirmDates = supplierOrderDao.find(sql);
+		String dates = "";
+		for(String date : confirmDates) {
+			if(StringUtils.isNotBlank(date)) {
+				dates += "'" +  date + "'," ;
+			}
+		}
 		//删除当日新订单
 		String deleteDetail = "delete from TSupllierOrderDetail t where t.supllierOrderId in ("
 				+ "  select  id from TSupllierOrder where status = 1)  ";
 		supplierOrderDao.updateHql(deleteDetail);
-		String hql = "delete from TSupllierOrder where status = 1 ";
-		supplierOrderDao.updateHql(hql);
+		String deleteSupllierOrder = "delete from TSupllierOrder where status = 1 ";
+		supplierOrderDao.updateHql(deleteSupllierOrder);
 		//更新已已付款订单的订单状态
 		String resetOrderStatus = "update TOrder t set t.status = 3  where  "
-				+ " t.confirmDate = " + dayOfOrderNo;
+				+ " t.confirmDate in ( " + dates.substring(0, dates.length()-1) + " )";
 		supplierOrderDao.updateHql(resetOrderStatus);
 	}
 	/**
