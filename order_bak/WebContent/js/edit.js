@@ -154,6 +154,7 @@
                         $("#orderNo").val(row.orderNo);   
                         $("#id").val(row.id); 
                         $('#confirmId').combobox('setValue', row.confirmId);
+                        $('#addressId').combobox('setValue', row.addressId);
                     }
     			});
     			$('#order_dlg').dialog('open');	

@@ -84,6 +84,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		                	 </c:forEach>
 		                </select>
 		        </div>
+		         <div class="form-group col-md-8">
+		                	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">配送地址：</label>
+		               <!-- login时获取list存入session中,加载数据是根据给select赋值confirmID -->
+		                <select name="addressId"  id= "addressId" class="easyui-combobox" 
+		                 editable="false" style="display: inline-block;width: 40%" 
+		                 class="form-control select2 easyui-combobox"  readonly="readonly">
+			                	 <c:forEach items="${addressList}" var="address" >
+				                	 	 <option value="${address.id}"> ${address.address}</option>
+			                	 </c:forEach>
+		                </select>
+		         </div>
 		    	</form>   
 		    	<div>
 				<table  id="table_print"  class="table" style="display: none">
