@@ -205,7 +205,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					{field:'companyName',title:'公司',width:100,align:'center'},
 					{field:'orderNo',title:'订单编号',width:100,align:'center'},
 					{field:'amount',title:'订单总价',width:100,align:'center'},
-					{field:'conirmDate',title:'采购批次',width:100,align:'center',
+					{field:'confirmDate',title:'采购批次',width:100,align:'center',
 						formatter: function(value,row,index){
 							if(row.confirmDate){
 								return row.confirmDate
@@ -346,6 +346,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	                	 	 if("${address.cid}"  ==  row.companyId && "${address.id}" == row.addressId)
 						    		str += ("&address=${address.address}")
 	                	 </c:forEach>
+	    			 }
+	    			 if(col == 'confirmId' && row.confirmDate == undefined ){
+	    				 <c:forEach items="${confirm}" var="it">
+	    				 if( "${it.id}" == row.confirmId)
+					    		str += ("&confirmDate=${it.confirmDate}日")
+                	 	</c:forEach>
 	    			 }
 	    		}
 	    		window.open("${pageContext.request.contextPath}/orderAction!loadByOrderId.action" + str);
